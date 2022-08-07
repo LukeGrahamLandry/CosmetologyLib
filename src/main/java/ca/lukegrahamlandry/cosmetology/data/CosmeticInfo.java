@@ -10,12 +10,19 @@ public class CosmeticInfo {
     public ResourceLocation model;
     public ResourceLocation animation;
 
+    public CosmeticInfo(ResourceLocation id){
+        this.id = id;
+        this.texture = new ResourceLocation(id.getNamespace(), "textures/" + id.getPath() + ".png");
+        this.model = new ResourceLocation(id.getNamespace(), "geo/" + id.getPath() + ".geo.json");
+        this.animation = null;
+    }
+
     public ResourceLocation getTexture(){
-        return texture == null ? id : texture;
+        return texture;
     }
 
     public ResourceLocation getModel(){
-        return model == null ? id : model;
+        return model;
     }
 
     public ResourceLocation getAnimation(){

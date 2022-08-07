@@ -9,13 +9,13 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-@Mod(CosmetologyApi.MOD_ID)
 public class CosmetologyApi {
     public static final Logger LOGGER = LogManager.getLogger();
     public static final String MOD_ID = "cosmetology";
 
     static Map<String, DataStore> clientDataSources = new HashMap<>();
 
+    // this should ONLY be called from the CLIENT side
     public static void registerSource(DataStore data){
         clientDataSources.put(data.getStoreID(), data);
     }

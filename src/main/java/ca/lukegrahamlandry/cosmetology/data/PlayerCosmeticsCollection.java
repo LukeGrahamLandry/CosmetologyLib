@@ -9,12 +9,13 @@ import java.util.Map;
 
 public class PlayerCosmeticsCollection {
     // CosmeticSlots -> CosmeticInfo
-    public Map<ResourceLocation, ResourceLocation> equipped = new HashMap<>();
+    // a resource location cannot be the key because then gson can't remake it because it represents rls as {path: "", namespace: ""} and json cannot have objects as keys
+    public Map<String, ResourceLocation> equipped = new HashMap<>();
     public List<ResourceLocation> unlocked = new ArrayList<>();
 
     public void equip(ResourceLocation slot, ResourceLocation cosmetic){
         if (cosmetic == null) equipped.remove(slot);
-        else equipped.put(slot, cosmetic);
+        else equipped.put(slot.toString(), cosmetic);
     }
 
     public void lock(ResourceLocation cosmetic){

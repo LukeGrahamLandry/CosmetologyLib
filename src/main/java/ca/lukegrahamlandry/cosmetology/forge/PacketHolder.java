@@ -19,15 +19,21 @@ public class PacketHolder<T extends BaseMessage> {
 
     public void encode(T message, PacketBuffer buffer){
         JsonElement data = gson.toJsonTree(message);
+        System.out.println("encode " + data.toString());
         buffer.writeUtf(data.toString());
     }
 
     public T decode(PacketBuffer buffer){
-        return gson.fromJson(buffer.readUtf(), this.clazz);
+        String data = buffer.readUtf();
+        System.out.println("decode " + data);
+        return gson.fromJson(data, this.clazz);
     }
 
     public void handle(T message, Supplier<NetworkEvent.Context> context){
-        context.get().enqueueWork(message::handle);
+        context.get().enqueueWork(() -> {
+            System.out.println(message.getClass());
+            message.handle();
+        });
         context.get().setPacketHandled(true);
     }
 }

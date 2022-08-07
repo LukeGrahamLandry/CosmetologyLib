@@ -1,8 +1,9 @@
 package ca.lukegrahamlandry.cosmetology.data.packet;
 
-import ca.lukegrahamlandry.cosmetology.data.BasicDataStore;
+import ca.lukegrahamlandry.cosmetology.data.DataStoreImpl;
 import ca.lukegrahamlandry.cosmetology.data.PlayerCosmeticsCollection;
 import ca.lukegrahamlandry.cosmetology.data.packet.network.BaseMessage;
+import ca.lukegrahamlandry.cosmetology.data.packet.network.clientbound.RegisterMsg;
 import ca.lukegrahamlandry.cosmetology.data.packet.network.clientbound.SyncPlayerCosmeticsMsg;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -16,15 +17,16 @@ import java.util.function.BiConsumer;
 
 public class ServerPacketDataStore {
     public BiConsumer<ServerPlayerEntity, BaseMessage> sendPacketToPlayer;
-    public BasicDataStore model;
+    public DataStoreImpl model;
     public ServerPacketDataStore(String id, BiConsumer<ServerPlayerEntity, BaseMessage> sendPacketToPlayer) {
-        this.model = new BasicDataStore(id);
+        this.model = new DataStoreImpl(id);
         this.sendPacketToPlayer = sendPacketToPlayer;
     }
 
     public void onPlayerLogin(PlayerEntity player) {
         this.syncAllToPlayer((ServerPlayerEntity) player);
         this.syncPlayerToAll((ServerPlayerEntity) player);
+        sendPacketToPlayer.accept((ServerPlayerEntity) player, new RegisterMsg(model.getStoreID(), model.getAll()));
     }
 
     public void syncPlayerToAll(ServerPlayerEntity player) {
@@ -41,6 +43,7 @@ public class ServerPacketDataStore {
         Map<UUID, PlayerCosmeticsCollection> map = new HashMap<>();
 
         for (ServerPlayerEntity other : player.level.getServer().getPlayerList().getPlayers()){
+            System.out.println(other.getScoreboardName());
             map.put(other.getUUID(), this.model.getOrCreateData(other.getUUID()));
         }
 
@@ -48,7 +51,7 @@ public class ServerPacketDataStore {
         sendPacketToPlayer.accept(player, message);
     }
 
-    // TODO: impliment saving the state
+    // TODO: implement saving the state
     class DataStorage extends WorldSavedData {
         public DataStorage(String p_i2141_1_) {
             super(p_i2141_1_);

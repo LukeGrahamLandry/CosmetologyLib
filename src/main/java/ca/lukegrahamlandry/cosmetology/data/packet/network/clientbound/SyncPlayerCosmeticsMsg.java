@@ -26,8 +26,8 @@ public class SyncPlayerCosmeticsMsg extends BaseMessage {
         for (UUID player : this.cosmetics.keySet()){
             PlayerCosmeticsCollection data = this.cosmetics.get(player);
 
-            for (Map.Entry<ResourceLocation, ResourceLocation> slotData : data.equipped.entrySet()){
-                store.set(player, slotData.getKey(), slotData.getValue());
+            for (Map.Entry<String , ResourceLocation> slotData : data.equipped.entrySet()){
+                store.set(player, new ResourceLocation(slotData.getKey()), slotData.getValue());
             }
 
             for (ResourceLocation cosmeticKey : data.unlocked){

@@ -5,12 +5,12 @@ import net.minecraft.util.ResourceLocation;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class BasicDataStore implements DataStore {
+public class DataStoreImpl implements DataStore {
     private final String id;
     protected Map<ResourceLocation, CosmeticInfo> cosmetics = new HashMap<>();
     protected Map<UUID, PlayerCosmeticsCollection> playerCosmetics = new HashMap<>();
 
-    public BasicDataStore(String id){
+    public DataStoreImpl(String id){
         this.id = id;
     }
 

@@ -11,6 +11,7 @@ import net.minecraftforge.fml.network.simple.SimpleChannel;
 
 public class PacketRegistry {
     private SimpleChannel channel;
+    int i = 0;
 
     public SimpleChannel getChannel(){
         return this.channel;
@@ -27,6 +28,6 @@ public class PacketRegistry {
 
     private <T extends BaseMessage> void registerPacket(Class<T> clazz){
         PacketHolder<T> packet = new PacketHolder<>(clazz);
-        this.channel.registerMessage(0, clazz, packet::encode, packet::decode, packet::handle);
+        this.channel.registerMessage(i++, clazz, packet::encode, packet::decode, packet::handle);
     }
 }
