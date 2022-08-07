@@ -47,21 +47,20 @@ public class GeoCosmeticLayer extends BipedArmorLayer<AbstractClientPlayerEntity
     private void renderCosmetic(MatrixStack matrix, IRenderTypeBuffer buffer, AbstractClientPlayerEntity player, int light, CosmeticInfo cosmetic, float partialTicks) {
         if (!modelCache.containsKey(cosmetic)) modelCache.put(cosmetic, new GeoCosmeticRender(cosmetic));
 
-        BipedModel t = modelCache.get(cosmetic);
-        if (t == null) return;
+        GeoCosmeticRender geoRenderer = modelCache.get(cosmetic);
+        if (geoRenderer == null) return;
 
-        copyRotations(this.renderer.getModel(), t);
-        ((GeoArmorRenderer) t).applyEntityStats(this.renderer.getModel());
+        copyRotations(this.renderer.getModel(), geoRenderer);
+        geoRenderer.applyEntityStats(this.renderer.getModel());
 
-        // ((GeoArmorRenderer) t).applySlot(slotIn);
-        ((GeoArmorRenderer) t).setCurrentItem(player, AN_ITEM_STACK, EquipmentSlotType.CHEST);
-        // System.out.println(entityLivingBaseIn.isSneaking() + " " + t.isSneak);
+        geoRenderer.setCurrentItem(player, AN_ITEM_STACK, EquipmentSlotType.CHEST);
         IVertexBuilder vertex = ItemRenderer.getArmorFoilBuffer(buffer,
                 RenderType.armorCutoutNoCull(cosmetic.getTexture()),
                 false, false);
         // GeoArmorRenderer.getRenderer(NullItem.class, player).getTextureLocation(ITEM)
 
-        ((GeoCosmeticRender) t).render(partialTicks, matrix, vertex, light);
+        geoRenderer.filterBones();
+        geoRenderer.render(partialTicks, matrix, vertex, light);
     }
 
     private static void copyRotations(BipedModel from, BipedModel to) {

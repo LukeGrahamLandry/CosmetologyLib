@@ -2,6 +2,8 @@ package ca.lukegrahamlandry.cosmetology.data;
 
 import net.minecraft.util.ResourceLocation;
 
+import java.util.List;
+
 public class CosmeticInfo {
     public ResourceLocation id;
     public ResourceLocation slot;
@@ -9,6 +11,14 @@ public class CosmeticInfo {
     public ResourceLocation texture;
     public ResourceLocation model;
     public ResourceLocation animation;
+    public List<String> bones = null;
+
+    public CosmeticInfo(ResourceLocation id, ResourceLocation assetPath, ResourceLocation slot, List<String> bones){
+        this(assetPath);
+        this.id = id;
+        this.slot = slot;
+        this.bones = bones;
+    }
 
     public CosmeticInfo(ResourceLocation id){
         this.id = id;
