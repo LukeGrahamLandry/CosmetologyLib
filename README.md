@@ -1,4 +1,62 @@
 # CosmetologyLib
 
-The Minecraft EULA/CUG says it's okay to sell cosmetics as long as you don't sell capes, so... don't do that.
+A library to help Minecraft mods add custom cosmetics.
 
+### Features
+
+- render additional geckolib models on the player
+- track slots for different cosmetics
+- lock and unlock access to cosmetics
+- packets for syncing with server saved data
+- widgets for displaying cosmetics in guis
+
+### Notes
+
+- Since I want the library to work when shadowed, it can't rely on getting loaded as a mod. That means no mixins and no forge events.
+- The Minecraft EULA/CUG says don't sell cosmetics that look like capes, so... don't do that.
+- Mojang is probably cracking down on NFTs soon, so... don't do that.
+
+### Tutorials
+
+- TODO: Creating Armor Models with Geckolib in Block Bench
+- TODO: Creating Player Animations with Geckolib in Block Bench
+- TODO: Adding Patron Only Cosmetics To Your Mod or Modpack
+
+### Roadmap 
+
+- widgets for displaying cosmetics in guis
+- command nodes for managing cosmetics
+- geckolib animations as emotes
+- sounds synced with animations
+- replacing the player completely with different models
+  - builds directly on doing it for emotes
+  - good for doing brain dead "Minecraft But..." mods quickly
+- download resource packs from a url
+  - load cosmetic definitions from json
+  - manifest file with hashes for efficient downloading
+- support ambient particles
+- support vanilla Modded Entity model format
+- support [CustomPlayerModels](https://github.com/tom5454/CustomPlayerModels/wiki/API-documentation#set-model-041) model format
+- support spoofing skins for vanilla clients
+  - integrates well with cpm for modded clients
+- patreon/kofi/github sponsers DataStore
+  - load keys from datapack so other mods/modpacks can easily use
+  - how to get patreon data securely
+  each creator can be its own DataStore instance but select cosmetics from same gui
+- sql db DataStore
+- [tebex.io](https://github.com/tebexio/Tebex-Forge) DataStore
+- spigot plugin permissions DataSource
+- port to multi-loader & later MC versions (separate version common code as well, core code that doesn't reference minecraft classes)
+- tutorial videos on making the models/animations and putting the in a resource pack in the right format
+- api improvements
+  - store equipped and unlocked in different places
+      - ie server tracking equipped and unlocked from one of the below, `new DataStore(EquippedInfoDataStore, UnlockedInfoDataStore)`
+      - start with just splitting DataSource into two interfaces
+  - split CosmeticInfo into types
+      - geo addition, geo model replace, vanilla, cpm, particle, emote, skin
+      - interface: boolean canGoInSlot(CosmeticSlot), allow incompatibility with other types
+      - tags for what can enable/disable
+  - .mod package so it doesn't need to be shadowed
+- developer documentation
+
+PRs for these or anything else you think would be cool are always welcome!

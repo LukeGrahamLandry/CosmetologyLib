@@ -1,7 +1,6 @@
-package ca.lukegrahamlandry.cosmetology.client.render;
+package ca.lukegrahamlandry.cosmetology.client.geo;
 
 import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ArmorMaterial;
 import net.minecraft.item.IArmorMaterial;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;

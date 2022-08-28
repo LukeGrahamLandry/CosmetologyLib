@@ -1,10 +1,7 @@
 package ca.lukegrahamlandry.cosmetology.event;
 
-import ca.lukegrahamlandry.cosmetology.CosmetologyApi;
-import ca.lukegrahamlandry.cosmetology.client.render.GeoCosmeticLayer;
-import ca.lukegrahamlandry.cosmetology.data.DataStore;
+import ca.lukegrahamlandry.cosmetology.client.geo.GeoCosmeticLayer;
 import net.minecraft.client.renderer.entity.PlayerRenderer;
-import net.minecraft.entity.player.PlayerEntity;
 
 import java.util.Collection;
 

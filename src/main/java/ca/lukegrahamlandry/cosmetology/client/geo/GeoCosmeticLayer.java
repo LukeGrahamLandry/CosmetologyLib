@@ -1,4 +1,4 @@
-package ca.lukegrahamlandry.cosmetology.client.render;
+package ca.lukegrahamlandry.cosmetology.client.geo;
 
 import ca.lukegrahamlandry.cosmetology.CosmetologyApi;
 import ca.lukegrahamlandry.cosmetology.data.CosmeticInfo;
@@ -18,17 +18,14 @@ import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ArmorMaterial;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import software.bernie.geckolib3.core.processor.IBone;
-import software.bernie.geckolib3.renderers.geo.GeoArmorRenderer;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class GeoCosmeticLayer extends BipedArmorLayer<AbstractClientPlayerEntity, PlayerModel<AbstractClientPlayerEntity>, BipedModel<AbstractClientPlayerEntity>> {
-    private static final Map<CosmeticInfo, GeoCosmeticRender> modelCache = new HashMap<>();
     PlayerRenderer renderer;
     public GeoCosmeticLayer(PlayerRenderer renderer) {
-        super(renderer, null, null);
+        super(renderer, null, null);  // null is fine since i never call super.render
         this.renderer = renderer;
     }
 
@@ -41,29 +38,23 @@ public class GeoCosmeticLayer extends BipedArmorLayer<AbstractClientPlayerEntity
         }
     }
 
-    // TODO: ignore eqipment slot somehow
-    static ItemStack AN_ITEM_STACK = new ItemStack(new NullItem(ArmorMaterial.CHAIN, EquipmentSlotType.CHEST, new Item.Properties()));
+    private static final Map<CosmeticInfo, GeoCosmeticRender> modelCache = new HashMap<>();
+    private static ItemStack AN_ITEM_STACK = new ItemStack(new NullItem(ArmorMaterial.CHAIN, EquipmentSlotType.CHEST, new Item.Properties()));
 
     private void renderCosmetic(MatrixStack matrix, IRenderTypeBuffer buffer, AbstractClientPlayerEntity player, int light, CosmeticInfo cosmetic, float partialTicks) {
         if (!modelCache.containsKey(cosmetic)) modelCache.put(cosmetic, new GeoCosmeticRender(cosmetic));
-
         GeoCosmeticRender geoRenderer = modelCache.get(cosmetic);
-        if (geoRenderer == null) return;
 
         copyRotations(this.renderer.getModel(), geoRenderer);
         geoRenderer.applyEntityStats(this.renderer.getModel());
-
         geoRenderer.setCurrentItem(player, AN_ITEM_STACK, EquipmentSlotType.CHEST);
-        IVertexBuilder vertex = ItemRenderer.getArmorFoilBuffer(buffer,
-                RenderType.armorCutoutNoCull(cosmetic.getTexture()),
-                false, false);
-        // GeoArmorRenderer.getRenderer(NullItem.class, player).getTextureLocation(ITEM)
-
         geoRenderer.filterBones();
+
+        IVertexBuilder vertex = ItemRenderer.getArmorFoilBuffer(buffer, RenderType.armorCutoutNoCull(cosmetic.getTexture()), false, false);  // last param = isFoil (enchantment glint)
         geoRenderer.render(partialTicks, matrix, vertex, light);
     }
 
-    private static void copyRotations(BipedModel from, BipedModel to) {
+    private static void copyRotations(BipedModel<?> from, BipedModel<?> to) {
         copyRotations(from.head, to.head);
         copyRotations(from.hat, to.hat);
         copyRotations(from.body, to.body);

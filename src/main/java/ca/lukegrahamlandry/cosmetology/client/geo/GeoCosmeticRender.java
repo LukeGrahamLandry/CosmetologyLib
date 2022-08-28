@@ -1,4 +1,4 @@
-package ca.lukegrahamlandry.cosmetology.client.render;
+package ca.lukegrahamlandry.cosmetology.client.geo;
 
 import ca.lukegrahamlandry.cosmetology.data.CosmeticInfo;
 import net.minecraft.inventory.EquipmentSlotType;
@@ -46,13 +46,8 @@ public class GeoCosmeticRender extends GeoArmorRenderer<NullItem> {
         leftBootBone.setHidden(!(ignore || this.cosmetic.bones.contains("leftBootBone")));
     }
 
-    @Override
-    public GeoArmorRenderer<NullItem> applySlot(EquipmentSlotType slot) {
-        // TODO: this should do it based on the bones the cosmetic things should be displayed, we dont actially care about the
-        return super.applySlot(slot);
-    }
-
     // TODO: probably needs to actually be unique for animations to work
+    // think i might also need some of my own packets if geckolib is shadowed
     @Override
     public Integer getUniqueID(NullItem animatable) {
         return 314159;
