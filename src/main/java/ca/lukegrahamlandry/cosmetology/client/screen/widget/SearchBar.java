@@ -1,10 +1,9 @@
 package ca.lukegrahamlandry.cosmetology.client.screen.widget;
+package mod.cosmetics.mcbg.client.screen.widget;
 
-import ca.lukegrahamlandry.cosmetology.data.CosmeticInfo;
+import ca.lukegrahamlandry.cosmetology.data.api.CosmeticInfo;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 
 import java.util.ArrayList;

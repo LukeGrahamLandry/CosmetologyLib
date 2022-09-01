@@ -1,8 +1,8 @@
 package ca.lukegrahamlandry.cosmetology.client.geo;
 
 import ca.lukegrahamlandry.cosmetology.CosmetologyApi;
-import ca.lukegrahamlandry.cosmetology.data.CosmeticInfo;
-import ca.lukegrahamlandry.cosmetology.data.DataStore;
+import ca.lukegrahamlandry.cosmetology.data.api.CosmeticInfo;
+import ca.lukegrahamlandry.cosmetology.data.api.DataStore;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.entity.player.AbstractClientPlayerEntity;

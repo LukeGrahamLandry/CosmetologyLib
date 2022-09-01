@@ -1,13 +1,11 @@
 package ca.lukegrahamlandry.cosmetology.data.packet.network.clientbound;
 
 import ca.lukegrahamlandry.cosmetology.CosmetologyApi;
-import ca.lukegrahamlandry.cosmetology.data.CosmeticInfo;
-import ca.lukegrahamlandry.cosmetology.data.DataStore;
+import ca.lukegrahamlandry.cosmetology.data.api.DataStore;
 import ca.lukegrahamlandry.cosmetology.data.PlayerCosmeticsCollection;
 import ca.lukegrahamlandry.cosmetology.data.packet.network.BaseMessage;
 import net.minecraft.util.ResourceLocation;
 
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 

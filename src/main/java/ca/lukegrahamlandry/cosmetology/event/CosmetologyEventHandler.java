@@ -1,11 +1,8 @@
 package ca.lukegrahamlandry.cosmetology.event;
 
 import ca.lukegrahamlandry.cosmetology.CosmetologyApi;
-import ca.lukegrahamlandry.cosmetology.data.DataStore;
-import net.minecraft.client.renderer.entity.PlayerRenderer;
+import ca.lukegrahamlandry.cosmetology.data.api.DataStore;
 import net.minecraft.entity.player.PlayerEntity;
-
-import java.util.Collection;
 
 public class CosmetologyEventHandler {
     public static void onPlayerLogin(PlayerEntity player){

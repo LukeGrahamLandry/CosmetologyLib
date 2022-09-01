@@ -1,4 +1,4 @@
-package ca.lukegrahamlandry.cosmetology.data;
+package ca.lukegrahamlandry.cosmetology.data.api;
 
 import net.minecraft.util.ResourceLocation;
 

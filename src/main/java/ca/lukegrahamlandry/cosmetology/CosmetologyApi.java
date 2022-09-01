@@ -1,7 +1,6 @@
 package ca.lukegrahamlandry.cosmetology;
 
-import ca.lukegrahamlandry.cosmetology.data.DataStore;
-import net.minecraftforge.fml.common.Mod;
+import ca.lukegrahamlandry.cosmetology.data.api.DataStore;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

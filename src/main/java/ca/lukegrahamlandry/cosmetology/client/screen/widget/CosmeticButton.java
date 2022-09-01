@@ -2,7 +2,8 @@ package ca.lukegrahamlandry.cosmetology.client.screen.widget;
 
 import ca.lukegrahamlandry.cosmetology.client.geo.GeoCosmeticRender;
 import ca.lukegrahamlandry.cosmetology.client.geo.NullItem;
-import ca.lukegrahamlandry.cosmetology.data.CosmeticInfo;
+import ca.lukegrahamlandry.cosmetology.data.api.CosmeticInfo;
+import ca.lukegrahamlandry.cosmetology.data.api.CosmeticSlots;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
@@ -26,37 +27,71 @@ import java.util.Arrays;
 
 public class CosmeticButton extends Button {
     protected final CosmeticInfo cosmetic;
+    protected final Drawable texture;
+    protected final Drawable hoveredTexture;
 
-    public CosmeticButton(CosmeticInfo cosmetic, int x, int y, int width, int height, IPressable press){
+    public CosmeticButton(CosmeticInfo cosmetic, int x, int y, int width, int height, IPressable press, Drawable texture, Drawable hoveredTexture){
         super(x, y, width, height, new StringTextComponent(""), press, CosmeticButton::tooltip);
         this.cosmetic = cosmetic;
+        this.texture = texture;
+        this.hoveredTexture = hoveredTexture;
     }
 
     @Override
     protected boolean clicked(double p_230992_1_, double p_230992_3_) {
-        System.out.println(p_230992_1_ + " " + p_230992_3_ + " " + this.x + " " + this.y);
         return super.clicked(p_230992_1_, p_230992_3_);
     }
 
     @Override
     public void render(MatrixStack stack, int mouseX, int mouseY, float p_230430_4_) {
-        super.render(stack, mouseX, mouseY, p_230430_4_);
         this.isHovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
         if (this.visible) {
-            this.renderCosmetic(stack);
+            if (this.isHovered){
+                this.hoveredTexture.screenY = this.y;
+                this.hoveredTexture.screenX = this.x;
+                this.hoveredTexture.blit(stack);
+            } else {
+                this.texture.screenY = this.y;
+                this.texture.screenX = this.x;
+                this.texture.blit(stack);
+            }
+
+            this.renderCosmetic();
             if (this.isHovered){
                 this.renderToolTip(stack, mouseX, mouseY);
             }
         }
     }
 
-    public void renderCosmetic(MatrixStack stack){
-        renderCosmetic(stack, this.cosmetic, this.x + (this.width / 2), this.y + (this.height / 2), this.width, this.height, this.hasGlint(), false);
+    public void renderCosmetic(){
+        renderCosmetic(this.cosmetic, this.x + (this.width / 2), this.y + (this.height / 2), this.width, this.height, this.hasGlint(), false);
     }
 
     private static ItemStack AN_ITEM_STACK = new ItemStack(new NullItem(ArmorMaterial.CHAIN, EquipmentSlotType.CHEST, new Item.Properties()));
 
-    public static void renderCosmetic(MatrixStack stack, CosmeticInfo cosmetic, int centerX, int centerY, int width, int height, boolean glint, boolean selected){
+
+    public static void transform(MatrixStack stack, CosmeticInfo cosmetic){
+        float slotYShift = 0;
+        float scale = 1;
+        if (cosmetic.slot.equals(CosmeticSlots.HEAD)){
+            slotYShift = -10;
+            scale = 0.75F;
+        } else if (cosmetic.slot.equals(CosmeticSlots.CHEST)){
+            slotYShift = 10;
+            scale = 0.75F;
+        } else if (cosmetic.slot.equals(CosmeticSlots.LEGS)){
+            slotYShift = 30;
+        } else if (cosmetic.slot.equals(CosmeticSlots.FEET)){
+            slotYShift = 40;
+        }
+
+        stack.mulPose(Vector3f.YP.rotationDegrees(30));
+        stack.mulPose(Vector3f.XP.rotationDegrees(180));
+        stack.mulPose(Vector3f.YP.rotationDegrees(180));
+        stack.translate(0, slotYShift, 0);
+        stack.scale(scale, scale, 1);
+    }
+    public static void renderCosmetic(CosmeticInfo cosmetic, int centerX, int centerY, int width, int height, boolean glint, boolean selected){
         // System.out.println("try render "  + cosmetic.id + " model-" + cosmetic.getModel() + " texture-" + cosmetic.getTexture());
         int scale = 30;
         float lookAtX = 0;
@@ -72,6 +107,7 @@ public class CosmeticButton extends Button {
         RenderSystem.scalef(1.0F, 1.0F, -1.0F);
         MatrixStack matrixstack = new MatrixStack();
         matrixstack.translate(0.0D, 0.0D, 1000.0D);
+        transform(matrixstack, cosmetic);
         matrixstack.scale((float)scale, (float)scale, (float)scale);
         Quaternion quaternion = Vector3f.ZP.rotationDegrees(180.0F);
         Quaternion quaternion1 = Vector3f.XP.rotationDegrees(f1 * 20.0F);

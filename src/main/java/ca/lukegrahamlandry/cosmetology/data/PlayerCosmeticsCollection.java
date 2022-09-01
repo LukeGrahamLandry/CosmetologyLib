@@ -14,7 +14,7 @@ public class PlayerCosmeticsCollection {
     public List<ResourceLocation> unlocked = new ArrayList<>();
 
     public void equip(ResourceLocation slot, ResourceLocation cosmetic){
-        if (cosmetic == null) equipped.remove(slot);
+        if (cosmetic == null) equipped.remove(slot.toString());
         else equipped.put(slot.toString(), cosmetic);
     }
 

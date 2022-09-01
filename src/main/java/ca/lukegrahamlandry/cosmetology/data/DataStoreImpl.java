@@ -1,5 +1,7 @@
 package ca.lukegrahamlandry.cosmetology.data;
 
+import ca.lukegrahamlandry.cosmetology.data.api.CosmeticInfo;
+import ca.lukegrahamlandry.cosmetology.data.api.DataStore;
 import net.minecraft.util.ResourceLocation;
 
 import java.util.*;
@@ -42,7 +44,17 @@ public class DataStoreImpl implements DataStore {
 
     @Override
     public void clearCosmetic(UUID playerID, ResourceLocation cosmeticKey) {
-        // TODO
+        List<ResourceLocation> slotsToClear = new ArrayList<>();
+        for (Map.Entry<String, ResourceLocation> data : getOrCreateData(playerID).equipped.entrySet()){
+            System.out.println(data.getValue() + " " + cosmeticKey);
+            if (data.getValue().equals(cosmeticKey)) {
+                slotsToClear.add(new ResourceLocation(data.getKey()));
+            }
+        }
+
+        for (ResourceLocation slot : slotsToClear){
+            clearSlot(playerID, slot);
+        }
     }
 
     @Override

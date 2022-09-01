@@ -1,7 +1,6 @@
 package ca.lukegrahamlandry.cosmetology.client.geo;
 
-import ca.lukegrahamlandry.cosmetology.data.CosmeticInfo;
-import net.minecraft.inventory.EquipmentSlotType;
+import ca.lukegrahamlandry.cosmetology.data.api.CosmeticInfo;
 import net.minecraft.util.ResourceLocation;
 import software.bernie.geckolib3.core.processor.IBone;
 import software.bernie.geckolib3.model.AnimatedGeoModel;

@@ -1,12 +1,11 @@
 package ca.lukegrahamlandry.cosmetology.data.packet.network.clientbound;
 
 import ca.lukegrahamlandry.cosmetology.CosmetologyApi;
-import ca.lukegrahamlandry.cosmetology.data.CosmeticInfo;
-import ca.lukegrahamlandry.cosmetology.data.DataStore;
+import ca.lukegrahamlandry.cosmetology.data.api.CosmeticInfo;
+import ca.lukegrahamlandry.cosmetology.data.api.DataStore;
 import ca.lukegrahamlandry.cosmetology.data.packet.network.BaseMessage;
 
 import java.util.Collection;
-import java.util.List;
 
 public class RegisterMsg extends BaseMessage {
     private String sourceID;
