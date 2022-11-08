@@ -1,3 +1,4 @@
+package ca.lukegrahamlandry.cosmetology.client.screen.widget;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.Minecraft;
@@ -38,5 +39,22 @@ public class Drawable {
     public void blit(MatrixStack stack, int screenX, int screenY, int textureX, int textureY, int width, int height) {
         Minecraft.getInstance().getTextureManager().bind(this.texture);
         Screen.blit(stack, screenX, screenY, 0, textureX, textureY, width, height, 256, 256);
+    }
+
+    public static class Multi extends Drawable {
+        private final Drawable a;
+        private final Drawable b;
+
+        public Multi(Drawable a, Drawable b){
+            super(null, 0, 0, 0, 0, 0, 0);
+            this.a = a;
+            this.b = b;
+        }
+
+        @Override
+        public void blit(MatrixStack stack, int screenX, int screenY, int textureX, int textureY, int width, int height) {
+            this.a.blit(stack, screenX, screenY, textureX, textureY, width, height);
+            this.b.blit(stack, screenX, screenY, textureX, textureY, width, height);
+        }
     }
 }

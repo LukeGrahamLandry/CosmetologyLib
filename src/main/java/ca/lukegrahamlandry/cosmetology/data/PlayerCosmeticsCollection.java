@@ -2,10 +2,8 @@ package ca.lukegrahamlandry.cosmetology.data;
 
 import net.minecraft.util.ResourceLocation;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Stream;
 
 public class PlayerCosmeticsCollection {
     // CosmeticSlots -> CosmeticInfo
@@ -18,15 +16,23 @@ public class PlayerCosmeticsCollection {
         else equipped.put(slot.toString(), cosmetic);
     }
 
-    public void lock(ResourceLocation cosmetic){
-        unlocked.add(cosmetic);
+    public boolean hasUnlocked(ResourceLocation cosmetic){
+        return unlocked.contains(cosmetic);
     }
 
-    public void unlock(ResourceLocation cosmetic){
+    public void lock(ResourceLocation cosmetic){
         unlocked.remove(cosmetic);
     }
 
+    public void unlock(ResourceLocation cosmetic){
+        unlocked.add(cosmetic);
+    }
+
     public ResourceLocation getFromSlot(ResourceLocation slotID) {
-        return equipped.get(slotID);
+        return equipped.get(slotID.toString());
+    }
+
+    public void lockAll() {
+        unlocked.clear();
     }
 }

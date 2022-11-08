@@ -1,6 +1,7 @@
 package ca.lukegrahamlandry.cosmetology;
 
 import ca.lukegrahamlandry.cosmetology.data.api.DataStore;
+import ca.lukegrahamlandry.cosmetology.data.packet.ServerPacketDataStore;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -13,6 +14,7 @@ public class CosmetologyApi {
     public static final String MOD_ID = "cosmetology";
 
     static Map<String, DataStore> clientDataSources = new HashMap<>();
+    public static Map<String, ServerPacketDataStore> serverPacketDataSources = new HashMap<>();
 
     // this should ONLY be called from the CLIENT side
     public static void registerSource(DataStore data){

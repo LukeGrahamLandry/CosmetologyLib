@@ -28,6 +28,7 @@ public class SyncPlayerCosmeticsMsg extends BaseMessage {
                 store.set(player, new ResourceLocation(slotData.getKey()), slotData.getValue());
             }
 
+            store.lockAll(player);
             for (ResourceLocation cosmeticKey : data.unlocked){
                 store.unlock(player, cosmeticKey);
             }

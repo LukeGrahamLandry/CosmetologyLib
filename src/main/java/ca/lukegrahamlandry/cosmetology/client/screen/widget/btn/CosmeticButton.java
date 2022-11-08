@@ -1,4 +1,4 @@
-package ca.lukegrahamlandry.cosmetology.client.screen.widget;
+package ca.lukegrahamlandry.cosmetology.client.screen.widget.btn;
 
 import ca.lukegrahamlandry.cosmetology.client.geo.GeoCosmeticRender;
 import ca.lukegrahamlandry.cosmetology.client.geo.NullItem;
@@ -7,6 +7,7 @@ import ca.lukegrahamlandry.cosmetology.data.api.CosmeticSlots;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
+import ca.lukegrahamlandry.cosmetology.client.screen.widget.Drawable;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
@@ -22,19 +23,20 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 
 import java.util.Arrays;
+import java.util.function.Consumer;
 
-public class CosmeticButton extends Button {
+public class CosmeticButton extends ImgButton {
     protected final CosmeticInfo cosmetic;
-    protected final Drawable texture;
-    protected final Drawable hoveredTexture;
+    private final Consumer<Runnable> tooltipAction;
+    public boolean buttonStateActive = false;
 
-    public CosmeticButton(CosmeticInfo cosmetic, int x, int y, int width, int height, IPressable press, Drawable texture, Drawable hoveredTexture){
-        super(x, y, width, height, new StringTextComponent(""), press, CosmeticButton::tooltip);
+    public CosmeticButton(CosmeticInfo cosmetic, int x, int y, int width, int height, IPressable press, Consumer<Runnable> tooltipAction, Drawable texture, Drawable hoveredTexture, Drawable activeTexture){
+        super(x, y, width, height, press, CosmeticButton::tooltip, texture, hoveredTexture, activeTexture);
         this.cosmetic = cosmetic;
-        this.texture = texture;
-        this.hoveredTexture = hoveredTexture;
+        this.tooltipAction = tooltipAction;
     }
 
     @Override
@@ -44,23 +46,8 @@ public class CosmeticButton extends Button {
 
     @Override
     public void render(MatrixStack stack, int mouseX, int mouseY, float p_230430_4_) {
-        this.isHovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
-        if (this.visible) {
-            if (this.isHovered){
-                this.hoveredTexture.screenY = this.y;
-                this.hoveredTexture.screenX = this.x;
-                this.hoveredTexture.blit(stack);
-            } else {
-                this.texture.screenY = this.y;
-                this.texture.screenX = this.x;
-                this.texture.blit(stack);
-            }
-
-            this.renderCosmetic();
-            if (this.isHovered){
-                this.renderToolTip(stack, mouseX, mouseY);
-            }
-        }
+        super.render(stack, mouseX, mouseY, p_230430_4_);
+        this.renderCosmetic();
     }
 
     public void renderCosmetic(){
@@ -160,9 +147,11 @@ public class CosmeticButton extends Button {
     }
 
     private static void tooltip(Button button, MatrixStack matrix, int xM, int yM) {
-        net.minecraftforge.fml.client.gui.GuiUtils.drawHoveringText(
-                matrix, Arrays.asList(((CosmeticButton)button).getTitle(), ((CosmeticButton)button).getDescription()),
-                xM, yM, 400, 200, -1, Minecraft.getInstance().font);
+        ((CosmeticButton)button).tooltipAction.accept(() -> {
+            net.minecraftforge.fml.client.gui.GuiUtils.drawHoveringText(
+                    matrix, Arrays.asList(((CosmeticButton)button).getTitle(), ((CosmeticButton)button).getDescription()),
+                    xM, yM, 400, 200, -1, Minecraft.getInstance().font);
+        });
     }
 
     public boolean hasGlint(){
@@ -170,10 +159,10 @@ public class CosmeticButton extends Button {
     }
 
     public TextComponent getTitle(){
-        return new StringTextComponent(this.cosmetic.id.toString());
+        return new TranslationTextComponent("cosmetic." + this.cosmetic.id.getNamespace() + "." + this.cosmetic.id.getPath());
     }
 
     public TextComponent getDescription(){
-        return new StringTextComponent("hello");
+        return new TranslationTextComponent("cosmetic." + this.cosmetic.id.getNamespace() + "." + this.cosmetic.id.getPath() + ".desc");
     }
 }

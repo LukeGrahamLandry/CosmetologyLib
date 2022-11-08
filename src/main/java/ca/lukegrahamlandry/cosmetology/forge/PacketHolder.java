@@ -32,7 +32,8 @@ public class PacketHolder<T extends BaseMessage> {
     public void handle(T message, Supplier<NetworkEvent.Context> context){
         context.get().enqueueWork(() -> {
             System.out.println(message.getClass());
-            message.handle();
+            if (context.get().getSender() == null) message.handle();
+            else message.handle(context.get().getSender());
         });
         context.get().setPacketHandled(true);
     }

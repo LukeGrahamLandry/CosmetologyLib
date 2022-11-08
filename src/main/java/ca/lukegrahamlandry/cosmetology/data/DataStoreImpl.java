@@ -11,6 +11,7 @@ public class DataStoreImpl implements DataStore {
     private final String id;
     protected Map<ResourceLocation, CosmeticInfo> cosmetics = new HashMap<>();
     protected Map<UUID, PlayerCosmeticsCollection> playerCosmetics = new HashMap<>();
+    public Runnable sync = () -> {};
 
     public DataStoreImpl(String id){
         this.id = id;
@@ -39,7 +40,7 @@ public class DataStoreImpl implements DataStore {
     // TODO: impl must check that cosmetic is unlocked
     @Override
     public void set(UUID playerID, ResourceLocation slotKey, ResourceLocation cosmeticKey) {
-        getOrCreateData(playerID).equip(slotKey, cosmeticKey);
+        if (getOrCreateData(playerID).hasUnlocked(cosmeticKey) || cosmeticKey == null) getOrCreateData(playerID).equip(slotKey, cosmeticKey);
     }
 
     @Override
@@ -76,6 +77,22 @@ public class DataStoreImpl implements DataStore {
     public void unlock(UUID player, ResourceLocation cosmeticKey) {
         getOrCreateData(player).unlock(cosmeticKey);
     }
+
+    @Override
+    public void lock(UUID player, ResourceLocation cosmeticKey) {
+        getOrCreateData(player).lock(cosmeticKey);
+    }
+
+    @Override
+    public boolean hasUnlocked(UUID player, ResourceLocation cosmetic){
+        return getOrCreateData(player).hasUnlocked(cosmetic);
+    }
+
+    @Override
+    public void lockAll(UUID player) {
+        getOrCreateData(player).lockAll();
+    }
+
 
     public PlayerCosmeticsCollection getOrCreateData(UUID playerID){
         if (!this.playerCosmetics.containsKey(playerID)){

@@ -1,5 +1,4 @@
 package ca.lukegrahamlandry.cosmetology.client.screen.widget;
-package mod.cosmetics.mcbg.client.screen.widget;
 
 import ca.lukegrahamlandry.cosmetology.data.api.CosmeticInfo;
 import net.minecraft.client.Minecraft;
