@@ -9,10 +9,10 @@ public class Drawable {
     private final ResourceLocation texture;
     public int screenX;
     public int screenY;
-    private final int textureX;
-    private final int textureY;
-    private final int width;
-    private final int height;
+    public final int textureX;
+    public final int textureY;
+    public final int width;
+    public final int height;
 
     public Drawable(ResourceLocation texture, int screenX, int screenY, int textureX, int textureY, int width, int height){
         this.texture = texture;
@@ -49,6 +49,16 @@ public class Drawable {
             super(null, 0, 0, 0, 0, 0, 0);
             this.a = a;
             this.b = b;
+        }
+
+        public void blit(MatrixStack stack, int x, int y){
+            a.blit(stack, x, y);
+            b.blit(stack, x, y);
+        }
+
+        public void blit(MatrixStack stack){
+            a.blit(stack);
+            b.blit(stack);
         }
 
         @Override

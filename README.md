@@ -24,13 +24,11 @@ A library to help Minecraft mods add custom cosmetics.
 
 ### Roadmap 
 
-- widgets for displaying cosmetics in guis
-- command nodes for managing cosmetics
 - geckolib animations as emotes
 - sounds synced with animations
 - replacing the player completely with different models
   - builds directly on doing it for emotes
-  - good for doing brain dead "Minecraft But..." mods quickly
+  - good for doing brain-dead "Minecraft But..." mods quickly
 - download resource packs from a url
   - load cosmetic definitions from json
   - manifest file with hashes for efficient downloading

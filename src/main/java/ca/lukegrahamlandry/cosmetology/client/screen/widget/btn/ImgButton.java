@@ -23,9 +23,7 @@ public class ImgButton extends Button {
         this.isHovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
         if (this.visible) {
             Drawable t = this.isHovered ? this.hoveredTexture : (this.buttonStateActive ? this.activeTexture : this.texture);
-            t.screenY = this.y;
-            t.screenX = this.x;
-            t.blit(stack);
+            t.blit(stack, this.x, this.y);
 
             if (this.isHovered){
                 this.renderToolTip(stack, mouseX, mouseY);

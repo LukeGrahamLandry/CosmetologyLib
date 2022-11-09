@@ -33,6 +33,7 @@ public class CosmeticsScrollGrid extends ExtendedList<CosmeticsScrollGrid.Entry>
     public Drawable hoveredTexture;
     public Drawable texture;
     public Drawable activeTexture;
+    public Drawable favouriteStar;
     private final BiConsumer<ResourceLocation, ResourceLocation> sendChangeToServerCallback;
 
 
@@ -72,7 +73,7 @@ public class CosmeticsScrollGrid extends ExtendedList<CosmeticsScrollGrid.Entry>
         
         List<Button> toAdd = new ArrayList<>();
         for (CosmeticInfo info : this.cosmetics){
-            CosmeticButton b = new CosmeticButton(info, this.x + (xIndex * btnWidth), this.y, 39, 50, (button) -> this.onPress(info), this.tooltips::add, texture, hoveredTexture, activeTexture);
+            CosmeticButton b = new CosmeticButton(info, this.x + (xIndex * btnWidth), this.y, 39, 50, (button) -> this.onPress(info), this.tooltips::add, texture, hoveredTexture, activeTexture, favouriteStar);
             b.buttonStateActive = this.backingDataStore.getActive(Minecraft.getInstance().player.getUUID()).contains(info);
             b.active = this.backingDataStore.hasUnlocked(Minecraft.getInstance().player.getUUID(), info.id);
             toAdd.add(b);

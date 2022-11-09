@@ -1,6 +1,7 @@
 package ca.lukegrahamlandry.cosmetology.client.screen.widget.btn;
 
 import ca.lukegrahamlandry.cosmetology.client.screen.widget.Drawable;
+import ca.lukegrahamlandry.cosmetology.client.screen.widget.btn.ImgButton;
 import net.minecraft.client.gui.widget.Widget;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.gui.widget.button.ImageButton;
@@ -13,10 +14,10 @@ import java.util.function.Consumer;
 
 public class ButtonRowGroup extends Widget {
     private List<ImgButton> tabButtons = new ArrayList<>();
-    private ImageButton leftButton;
-    private ImageButton rightButton;
+    public ImgButton leftButton;
+    public ImgButton rightButton;
     private int tabOffset = 0;
-    private int currentTab = 0;
+    public int currentTab = 0;
     private int btnWidth;
     private int btnCount;
     private final Consumer<Button> buttonAdder;
@@ -26,6 +27,9 @@ public class ButtonRowGroup extends Widget {
     public Drawable texture;
     public Drawable hoveredTexture;
     public Drawable activeTexture;
+    public Drawable leftIcon;
+    public Drawable rightIcon;
+    int offsetWithLastSelected = 0;
 
     public ButtonRowGroup(int x, int y, int btnWidth, int btnHeight, int btnCount, Consumer<Button> buttonAdder, List<Drawable> buttonIcons, Consumer<Integer> onSelect) {
         super(x, y, 1, 1, new StringTextComponent(""));
@@ -38,6 +42,13 @@ public class ButtonRowGroup extends Widget {
     }
 
     public void init() {
+        if (this.leftButton == null){
+            this.leftButton = new ImgButton(this.x - this.leftIcon.width, this.y, this.leftIcon.width, this.leftIcon.height, (btn) -> this.shift(-1), (a, b, c, d) -> {}, this.leftIcon, this.leftIcon, this.leftIcon);
+            this.rightButton = new ImgButton(this.x + (this.btnCount * this.btnWidth), this.y, this.leftIcon.width, this.leftIcon.height, (btn) -> this.shift(1), (a, b, c, d) -> {}, this.rightIcon, this.rightIcon, this.rightIcon);
+            this.buttonAdder.accept(this.leftButton);
+            this.buttonAdder.accept(this.rightButton);
+        }
+
         this.tabButtons.forEach((b) -> {
             b.visible = false;
             b.active = false;
@@ -47,8 +58,9 @@ public class ButtonRowGroup extends Widget {
         int xOffset = this.x;
         for (int i=0;i<btnCount;i++){
             int finalI = i;
+            if (this.buttonIcons.size() <= i + tabOffset) break;
             Drawable icon = this.buttonIcons.get(i + tabOffset);
-            ImgButton btn = new ImgButton(this.x + xOffset, this.y, this.btnWidth, this.btnHeight, (b) -> this.buttonPress(finalI + this.tabOffset), (a, b, c, d) -> {}, new Drawable.Multi(texture, icon), new Drawable.Multi(hoveredTexture, icon), new Drawable.Multi(activeTexture, icon));
+            ImgButton btn = new ImgButton(xOffset, this.y, this.btnWidth, this.btnHeight, (b) -> this.buttonPress(finalI + this.tabOffset), (a, b, c, d) -> {}, new Drawable.Multi(texture, icon), new Drawable.Multi(hoveredTexture, icon), new Drawable.Multi(activeTexture, icon));
             btn.buttonStateActive = this.currentTab == (i + tabOffset);
             this.tabButtons.add(btn);
             this.buttonAdder.accept(btn);
@@ -56,8 +68,19 @@ public class ButtonRowGroup extends Widget {
         }
     }
 
-    private void buttonPress(int index) {
+    private void shift(int dir) {
+        this.tabOffset += dir * this.btnCount;
+        this.tabOffset = Math.max(this.tabOffset, 0);
+        this.tabOffset = Math.min(this.tabOffset, this.buttonIcons.size());
+        this.init();
+    }
 
+    private void buttonPress(int index) {
+        this.onSelect.accept(index);
+        if (this.tabOffset == this.offsetWithLastSelected) this.tabButtons.get(this.currentTab % this.btnCount).buttonStateActive = false;
+        this.currentTab = index;
+        this.tabButtons.get(this.currentTab % this.btnCount).buttonStateActive = true;
+        this.offsetWithLastSelected = this.tabOffset;
     }
 
     public static class TabBtnData {
