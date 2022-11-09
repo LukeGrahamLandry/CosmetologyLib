@@ -4,6 +4,7 @@ import ca.lukegrahamlandry.cosmetology.data.api.CosmeticInfo;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,10 +19,10 @@ public class SearchBar extends TextFieldWidget {
         return this.getValue();
     }
 
-    // TODO: support lang translations
     public List<CosmeticInfo> filter(List<CosmeticInfo> all){
+        String search = getSearchTerm().toLowerCase(Locale.ROOT);
         List<CosmeticInfo> results = new ArrayList<>(all);
-        results.removeIf((info) -> !info.id.getPath().startsWith(getSearchTerm().toLowerCase(Locale.ROOT)));
+        results.removeIf((info) -> !info.id.getPath().startsWith(search) && !new TranslationTextComponent("cosmetic." + info.id.getNamespace() + "." + info.id.getPath()).getString().toLowerCase(Locale.ROOT).startsWith(search));
         return results;
     }
 }

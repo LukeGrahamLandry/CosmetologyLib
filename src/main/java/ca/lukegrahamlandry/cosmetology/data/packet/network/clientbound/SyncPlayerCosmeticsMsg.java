@@ -32,6 +32,11 @@ public class SyncPlayerCosmeticsMsg extends BaseMessage {
             for (ResourceLocation cosmeticKey : data.unlocked){
                 store.unlock(player, cosmeticKey);
             }
+
+            store.unfavouriteAll(player);
+            for (ResourceLocation cosmeticKey : data.favourites){
+                store.favourite(player, cosmeticKey);
+            }
         }
     }
 }

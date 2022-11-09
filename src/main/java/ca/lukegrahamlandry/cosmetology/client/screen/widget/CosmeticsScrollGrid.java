@@ -1,9 +1,9 @@
 package ca.lukegrahamlandry.cosmetology.client.screen.widget;
 
+import ca.lukegrahamlandry.cosmetology.client.screen.widget.btn.CosmeticButton;
 import ca.lukegrahamlandry.cosmetology.data.DataStoreImpl;
 import ca.lukegrahamlandry.cosmetology.data.api.CosmeticInfo;
 import com.mojang.blaze3d.matrix.MatrixStack;
-import ca.lukegrahamlandry.cosmetology.client.screen.widget.btn.CosmeticButton;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.widget.Widget;
 import net.minecraft.client.gui.widget.button.Button;
@@ -12,12 +12,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
-import java.util.concurrent.Callable;
-import java.util.function.BiConsumer;
+import java.util.*;
 import java.util.function.Consumer;
 
 public class CosmeticsScrollGrid extends ExtendedList<CosmeticsScrollGrid.Entry> {
@@ -34,10 +29,11 @@ public class CosmeticsScrollGrid extends ExtendedList<CosmeticsScrollGrid.Entry>
     public Drawable texture;
     public Drawable activeTexture;
     public Drawable favouriteStar;
-    private final BiConsumer<ResourceLocation, ResourceLocation> sendChangeToServerCallback;
+    private final OnEquipCallback equipCallback;
+    private final OnFavouriteCallback favouriteCallback;
+    private Map<ResourceLocation, CosmeticButton> btns = new HashMap<>();
 
-
-    public CosmeticsScrollGrid(Consumer<Button> buttonAdder, int x, int y, int width, int height, DataStoreImpl backingDataStore, BiConsumer<ResourceLocation, ResourceLocation> sendChangeToServerCallback){
+    public CosmeticsScrollGrid(Consumer<Button> buttonAdder, int x, int y, int width, int height, DataStoreImpl backingDataStore, OnEquipCallback sendEquipPacket, OnFavouriteCallback sendFavouritePacket){
         super(Minecraft.getInstance(), width, height, y, y + height, 49);
         this.x0 = x;
         this.x1 = this.x0 + width;
@@ -48,7 +44,8 @@ public class CosmeticsScrollGrid extends ExtendedList<CosmeticsScrollGrid.Entry>
         this.height = height;
         this.buttonCount = Math.floorDiv(width, 38);
         this.backingDataStore = backingDataStore;
-        this.sendChangeToServerCallback = sendChangeToServerCallback;
+        this.equipCallback = sendEquipPacket;
+        this.favouriteCallback = sendFavouritePacket;
 
         this.setRenderBackground(false);
         this.setRenderHeader(false, 0);
@@ -62,6 +59,7 @@ public class CosmeticsScrollGrid extends ExtendedList<CosmeticsScrollGrid.Entry>
         this.cosmetics = new ArrayList<>();
         this.cosmetics.addAll(sources);
 
+        this.btns.clear();
         Minecraft.getInstance().screen.children().removeIf((btn) -> btn instanceof CosmeticButton);
         while (!this.children().isEmpty()){
             this.remove(0);
@@ -73,10 +71,12 @@ public class CosmeticsScrollGrid extends ExtendedList<CosmeticsScrollGrid.Entry>
         
         List<Button> toAdd = new ArrayList<>();
         for (CosmeticInfo info : this.cosmetics){
-            CosmeticButton b = new CosmeticButton(info, this.x + (xIndex * btnWidth), this.y, 39, 50, (button) -> this.onPress(info), this.tooltips::add, texture, hoveredTexture, activeTexture, favouriteStar);
+            CosmeticButton b = new CosmeticButton(info, this.x + (xIndex * btnWidth), this.y, 39, 50, (button) -> this.setAsActive(info), (button) -> this.setAsFavourite(info), this.tooltips::add, texture, hoveredTexture, activeTexture, favouriteStar);
             b.buttonStateActive = this.backingDataStore.getActive(Minecraft.getInstance().player.getUUID()).contains(info);
             b.active = this.backingDataStore.hasUnlocked(Minecraft.getInstance().player.getUUID(), info.id);
+            b.buttonStateFavourite = this.backingDataStore.isFavourite(Minecraft.getInstance().player.getUUID(), info.id);
             toAdd.add(b);
+            btns.put(info.id, b);
             xIndex++;
             if (xIndex >= this.buttonCount){
                 xIndex = 0;
@@ -100,22 +100,33 @@ public class CosmeticsScrollGrid extends ExtendedList<CosmeticsScrollGrid.Entry>
         this.tooltips.clear();
     }
 
-    protected void onPress(CosmeticInfo info) {
+    protected void setAsActive(CosmeticInfo info) {
         UUID player = Minecraft.getInstance().player.getUUID();
         boolean isWearing = this.backingDataStore.getActive(player).contains(info);
 
         if (isWearing){
             this.backingDataStore.clearCosmetic(player, info.id);
-            this.sendChangeToServerCallback.accept(info.slot, null);
+            this.equipCallback.sync(info.slot, null);
         } else {
             this.backingDataStore.set(player, info.id);
-            this.sendChangeToServerCallback.accept(info.slot, info.id);
+            this.equipCallback.sync(info.slot, info.id);
         }
 
-        // todo: sync to server
-
-        // update button selected state
+        // remake buttons to update state
         this.setCosmetics(this.cosmetics);
+    }
+
+    protected void setAsFavourite(CosmeticInfo info) {
+        UUID player = Minecraft.getInstance().player.getUUID();
+        if (this.backingDataStore.isFavourite(player, info.id)){
+            this.backingDataStore.unfavourite(player, info.id);
+        } else {
+            this.backingDataStore.favourite(player, info.id);
+        }
+        this.favouriteCallback.sync(info.slot, info.id, this.backingDataStore.isFavourite(player, info.id));
+
+        // update state
+        this.btns.get(info.id).buttonStateFavourite = this.backingDataStore.isFavourite(player, info.id);
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -144,5 +155,14 @@ public class CosmeticsScrollGrid extends ExtendedList<CosmeticsScrollGrid.Entry>
 
     protected boolean isFocused() {
         return true;
+    }
+
+
+    public interface OnEquipCallback {
+        void sync(ResourceLocation slot, ResourceLocation id);
+    }
+
+    public interface OnFavouriteCallback {
+        void sync(ResourceLocation slot, ResourceLocation id, boolean isFavourite);
     }
 }

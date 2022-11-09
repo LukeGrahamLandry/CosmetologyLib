@@ -5,6 +5,7 @@ import ca.lukegrahamlandry.cosmetology.data.packet.network.BaseMessage;
 import ca.lukegrahamlandry.cosmetology.data.packet.network.clientbound.RegisterMsg;
 import ca.lukegrahamlandry.cosmetology.data.packet.network.clientbound.SyncPlayerCosmeticsMsg;
 import ca.lukegrahamlandry.cosmetology.data.packet.network.serverbound.EquipMsg;
+import ca.lukegrahamlandry.cosmetology.data.packet.network.serverbound.FavouriteMsg;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
@@ -24,6 +25,7 @@ public class PacketRegistry {
         registerPacket(SyncPlayerCosmeticsMsg.class);
 
         registerPacket(EquipMsg.class);
+        registerPacket(FavouriteMsg.class);
     }
 
     private <T extends BaseMessage> void registerPacket(Class<T> clazz){

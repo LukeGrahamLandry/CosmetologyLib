@@ -10,7 +10,7 @@ import java.util.UUID;
 // Unlocked - what cosmetics am i allowed to use
 // Equipped - what cosmetics am i wearing
 
-public interface DataStore extends DataStoreEquipped, DataStoreUnlocked, DataStoreAvailable {
+public interface DataStore extends DataStoreEquipped, DataStoreUnlocked, DataStoreAvailable, DataStoreFavourites {
     String getStoreID();
 
     default void onPlayerLogin(PlayerEntity player){

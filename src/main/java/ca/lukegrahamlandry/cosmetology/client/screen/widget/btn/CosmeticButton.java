@@ -31,20 +31,17 @@ import java.util.function.Consumer;
 public class CosmeticButton extends ImgButton {
     protected final CosmeticInfo cosmetic;
     private final Consumer<Runnable> tooltipAction;
+    private final IPressable rightClickCallback;
     private Drawable favouriteStar;
     public boolean buttonStateActive = false;
     public boolean buttonStateFavourite = false;
 
-    public CosmeticButton(CosmeticInfo cosmetic, int x, int y, int width, int height, IPressable press, Consumer<Runnable> tooltipAction, Drawable texture, Drawable hoveredTexture, Drawable activeTexture, Drawable favouriteStar){
-        super(x, y, width, height, press, CosmeticButton::tooltip, texture, hoveredTexture, activeTexture);
+    public CosmeticButton(CosmeticInfo cosmetic, int x, int y, int width, int height, IPressable leftClickCallback, IPressable rightClickCallback, Consumer<Runnable> tooltipAction, Drawable texture, Drawable hoveredTexture, Drawable activeTexture, Drawable favouriteStar){
+        super(x, y, width, height, leftClickCallback, CosmeticButton::tooltip, texture, hoveredTexture, activeTexture);
         this.cosmetic = cosmetic;
         this.tooltipAction = tooltipAction;
         this.favouriteStar = favouriteStar;
-    }
-
-    @Override
-    protected boolean clicked(double p_230992_1_, double p_230992_3_) {
-        return super.clicked(p_230992_1_, p_230992_3_);
+        this.rightClickCallback = rightClickCallback;
     }
 
     @Override
@@ -54,15 +51,15 @@ public class CosmeticButton extends ImgButton {
     }
 
     private void onRightclick() {
-        System.out.println("right clicked " + this.cosmetic.id);
         this.buttonStateFavourite = !this.buttonStateFavourite;
+        rightClickCallback.onPress(this);
     }
 
     @Override
     public void render(MatrixStack stack, int mouseX, int mouseY, float p_230430_4_) {
         super.render(stack, mouseX, mouseY, p_230430_4_);
         if (buttonStateFavourite && this.visible){
-            this.favouriteStar.blit(stack, this.x + 30, this.y + 5);
+            this.favouriteStar.blit(stack, this.x + 30, this.y + 3);
         }
         this.renderCosmetic();
     }

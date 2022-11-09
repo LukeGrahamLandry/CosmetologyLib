@@ -1,7 +1,6 @@
 package ca.lukegrahamlandry.cosmetology.data.packet.network.serverbound;
 
 import ca.lukegrahamlandry.cosmetology.CosmetologyApi;
-import ca.lukegrahamlandry.cosmetology.data.api.DataStore;
 import ca.lukegrahamlandry.cosmetology.data.packet.ServerPacketDataStore;
 import ca.lukegrahamlandry.cosmetology.data.packet.network.BaseMessage;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -9,28 +8,28 @@ import net.minecraft.util.ResourceLocation;
 
 import java.util.UUID;
 
-public class EquipMsg extends BaseMessage {
+public class FavouriteMsg extends BaseMessage {
+    private final boolean isFavourite;
     private String sourceID;
-    private UUID player;
     private final ResourceLocation slot;
     private ResourceLocation cosmetic;
 
-    public EquipMsg(String sourceID, UUID player, ResourceLocation slot, ResourceLocation cosmetic) {
+    public FavouriteMsg(String sourceID, ResourceLocation slot, ResourceLocation cosmetic, boolean fav) {
         this.sourceID = sourceID;
-        this.player = player;
         this.slot = slot;
         this.cosmetic = cosmetic;
+        this.isFavourite = fav;
     }
 
     @Override
     public void handle(ServerPlayerEntity sender) {
-        if (!sender.getUUID().equals(this.player)){
-            System.out.println(sender.getName() + "" + sender.getUUID() + " is trying to set cosmetics for " + this.player);
-            return;
-        }
         if (CosmetologyApi.serverPacketDataSources.containsKey(this.sourceID)){
             ServerPacketDataStore store = CosmetologyApi.serverPacketDataSources.get(this.sourceID);
-            store.model.set(this.player, this.slot, this.cosmetic);
+            if (this.isFavourite){
+                store.model.favourite(sender.getUUID(), this.cosmetic);
+            } else {
+                store.model.unfavourite(sender.getUUID(), this.cosmetic);
+            }
             store.syncPlayerToAll(sender);
         }
     }

@@ -5,9 +5,13 @@ import ca.lukegrahamlandry.cosmetology.data.PlayerCosmeticsCollection;
 import ca.lukegrahamlandry.cosmetology.data.packet.network.BaseMessage;
 import ca.lukegrahamlandry.cosmetology.data.packet.network.clientbound.RegisterMsg;
 import ca.lukegrahamlandry.cosmetology.data.packet.network.clientbound.SyncPlayerCosmeticsMsg;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.storage.WorldSavedData;
 
 import java.util.HashMap;
@@ -37,6 +41,8 @@ public class ServerPacketDataStore {
         for (ServerPlayerEntity other : player.level.getServer().getPlayerList().getPlayers()){
             sendPacketToPlayer.accept(other, message);
         }
+
+        this.getStorage(player.server).setDirty();
     }
 
     public void syncAllToPlayer(ServerPlayerEntity player) {
@@ -51,20 +57,26 @@ public class ServerPacketDataStore {
         sendPacketToPlayer.accept(player, message);
     }
 
-    // TODO: implement saving the state
-    class DataStorage extends WorldSavedData {
-        public DataStorage(String p_i2141_1_) {
-            super(p_i2141_1_);
+    public DataStorage getStorage(MinecraftServer server){
+        return server.overworld().getDataStorage().computeIfAbsent(DataStorage::new, this.model.getStoreID());
+    }
+
+    public class DataStorage extends WorldSavedData {
+        public DataStorage() {
+            super(ServerPacketDataStore.this.model.getStoreID());
         }
 
         @Override
         public void load(CompoundNBT tag) {
-
+            ServerPacketDataStore.this.model.read(tag.getString("data"));
+            System.out.println("load " + tag.getString("data"));
         }
 
         @Override
         public CompoundNBT save(CompoundNBT tag) {
-            return null;
+            tag.putString("data", ServerPacketDataStore.this.model.write());
+            System.out.println("save " + tag.getString("data"));
+            return tag;
         }
     }
 }

@@ -2,6 +2,7 @@ package ca.lukegrahamlandry.cosmetology.data;
 
 import ca.lukegrahamlandry.cosmetology.data.api.CosmeticInfo;
 import ca.lukegrahamlandry.cosmetology.data.api.DataStore;
+import com.google.gson.*;
 import net.minecraft.util.ResourceLocation;
 
 import java.util.*;
@@ -94,10 +95,45 @@ public class DataStoreImpl implements DataStore {
     }
 
 
+    @Override
+    public void favourite(UUID player, ResourceLocation cosmeticKey) {
+        getOrCreateData(player).favourite(cosmeticKey);
+    }
+
+    @Override
+    public void unfavourite(UUID player, ResourceLocation cosmeticKey) {
+        getOrCreateData(player).unfavourite(cosmeticKey);
+    }
+
+    @Override
+    public boolean isFavourite(UUID player, ResourceLocation cosmetic){
+        return getOrCreateData(player).isFavourite(cosmetic);
+    }
+
+    @Override
+    public void unfavouriteAll(UUID player) {
+        getOrCreateData(player).unfavouriteAll();
+    }
+
+
     public PlayerCosmeticsCollection getOrCreateData(UUID playerID){
         if (!this.playerCosmetics.containsKey(playerID)){
             this.playerCosmetics.put(playerID, new PlayerCosmeticsCollection());
         }
         return this.playerCosmetics.get(playerID);
+    }
+
+    private static Gson gson = new GsonBuilder().create();
+    public String write(){
+        JsonObject data = gson.toJsonTree(this.playerCosmetics).getAsJsonObject();
+        return data.toString();
+    }
+
+    public void read(String data){
+        JsonObject info = gson.fromJson(data, JsonObject.class);
+        this.playerCosmetics.clear();
+        for (Map.Entry<String, JsonElement> entry : info.entrySet()){
+            this.playerCosmetics.put(UUID.fromString(entry.getKey()), gson.fromJson(entry.getValue().toString(), PlayerCosmeticsCollection.class));
+        }
     }
 }
