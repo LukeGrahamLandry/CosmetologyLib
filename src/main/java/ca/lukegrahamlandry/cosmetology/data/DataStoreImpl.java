@@ -1,6 +1,7 @@
 package ca.lukegrahamlandry.cosmetology.data;
 
 import ca.lukegrahamlandry.cosmetology.data.api.CosmeticInfo;
+import ca.lukegrahamlandry.cosmetology.data.api.CosmeticSlots;
 import ca.lukegrahamlandry.cosmetology.data.api.DataStore;
 import com.google.gson.*;
 import net.minecraft.util.ResourceLocation;
@@ -36,6 +37,11 @@ public class DataStoreImpl implements DataStore {
     @Override
     public CosmeticInfo getInfo(ResourceLocation cosmetic) {
         return this.cosmetics.get(cosmetic);
+    }
+
+    @Override
+    public Set<ResourceLocation> getSlots() {
+        return CosmeticSlots.getAll();
     }
 
     // TODO: impl must check that cosmetic is unlocked
