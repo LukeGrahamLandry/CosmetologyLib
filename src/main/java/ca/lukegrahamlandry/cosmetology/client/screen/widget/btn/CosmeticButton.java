@@ -4,6 +4,7 @@ import ca.lukegrahamlandry.cosmetology.client.geo.GeoCosmeticRender;
 import ca.lukegrahamlandry.cosmetology.client.geo.NullItem;
 import ca.lukegrahamlandry.cosmetology.data.api.CosmeticInfo;
 import ca.lukegrahamlandry.cosmetology.data.api.CosmeticSlots;
+import ca.lukegrahamlandry.cosmetology.data.type.GeoModelAdditionCosmetic;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
@@ -21,7 +22,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.vector.Quaternion;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.vector.Vector3f;
-import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
@@ -65,7 +65,8 @@ public class CosmeticButton extends ImgButton {
     }
 
     public void renderCosmetic(){
-        renderCosmetic(this.cosmetic, this.x + (this.width / 2), this.y + (this.height / 2), this.width, this.height, this.hasGlint(), false);
+        if (this.cosmetic instanceof GeoModelAdditionCosmetic) renderGeoModelCosmetic((GeoModelAdditionCosmetic) this.cosmetic, this.x + (this.width / 2), this.y + (this.height / 2), this.width, this.height, this.hasGlint(), false);
+        else System.out.println("Cannot render cosmetic button for: " + this.cosmetic.toString());
     }
 
     private static ItemStack AN_ITEM_STACK = new ItemStack(new NullItem(ArmorMaterial.CHAIN, EquipmentSlotType.CHEST, new Item.Properties()));
@@ -92,7 +93,7 @@ public class CosmeticButton extends ImgButton {
         stack.translate(0, slotYShift, 0);
         stack.scale(scale, scale, 1);
     }
-    public static void renderCosmetic(CosmeticInfo cosmetic, int centerX, int centerY, int width, int height, boolean glint, boolean selected){
+    public static void renderGeoModelCosmetic(GeoModelAdditionCosmetic cosmetic, int centerX, int centerY, int width, int height, boolean glint, boolean selected){
         // System.out.println("try render "  + cosmetic.id + " model-" + cosmetic.getModel() + " texture-" + cosmetic.getTexture());
         int scale = 30;
         float lookAtX = 0;

@@ -4,6 +4,7 @@ import ca.lukegrahamlandry.cosmetology.CosmetologyApi;
 import net.minecraft.util.ResourceLocation;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -19,7 +20,7 @@ public class CosmeticSlots {
         return ALL;
     }
 
-    public static boolean add(ResourceLocation slotId){
+    public static boolean add(ResourceLocation slotId, ResourceLocation renderType){
         return ALL.add(slotId);
     }
 }

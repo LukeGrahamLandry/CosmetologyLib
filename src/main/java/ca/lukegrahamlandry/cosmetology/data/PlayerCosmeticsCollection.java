@@ -6,15 +6,13 @@ import java.util.*;
 import java.util.stream.Stream;
 
 public class PlayerCosmeticsCollection {
-    // CosmeticSlots -> CosmeticInfo
-    // a resource location cannot be the key because then gson can't remake it because it represents rls as {path: "", namespace: ""} and json cannot have objects as keys
-    public Map<String, ResourceLocation> equipped = new HashMap<>();
+    public Map<ResourceLocation, ResourceLocation> equipped = new HashMap<>();
     public List<ResourceLocation> unlocked = new ArrayList<>();
     public List<ResourceLocation> favourites = new ArrayList<>();
 
     public void equip(ResourceLocation slot, ResourceLocation cosmetic){
-        if (cosmetic == null) equipped.remove(slot.toString());
-        else equipped.put(slot.toString(), cosmetic);
+        if (cosmetic == null) equipped.remove(slot);
+        else equipped.put(slot, cosmetic);
     }
 
     public boolean hasUnlocked(ResourceLocation cosmetic){
@@ -42,7 +40,7 @@ public class PlayerCosmeticsCollection {
     }
 
     public ResourceLocation getFromSlot(ResourceLocation slotID) {
-        return equipped.get(slotID.toString());
+        return equipped.get(slotID);
     }
 
     public void lockAll() {

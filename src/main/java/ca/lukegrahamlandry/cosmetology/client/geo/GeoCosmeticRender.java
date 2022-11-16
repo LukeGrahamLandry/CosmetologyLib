@@ -1,15 +1,16 @@
 package ca.lukegrahamlandry.cosmetology.client.geo;
 
 import ca.lukegrahamlandry.cosmetology.data.api.CosmeticInfo;
+import ca.lukegrahamlandry.cosmetology.data.type.GeoModelAdditionCosmetic;
 import net.minecraft.util.ResourceLocation;
 import software.bernie.geckolib3.core.processor.IBone;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.renderers.geo.GeoArmorRenderer;
 
 public class GeoCosmeticRender extends GeoArmorRenderer<NullItem> {
-    private final CosmeticInfo cosmetic;
+    private final GeoModelAdditionCosmetic cosmetic;
 
-    public GeoCosmeticRender(CosmeticInfo cosmetic) {
+    public GeoCosmeticRender(GeoModelAdditionCosmetic cosmetic) {
         super(new Model(cosmetic));
         this.cosmetic = cosmetic;
         this.headBone = "helmet";
@@ -53,8 +54,8 @@ public class GeoCosmeticRender extends GeoArmorRenderer<NullItem> {
     }
 
     static class Model extends AnimatedGeoModel<NullItem> {
-        CosmeticInfo cosmetic;
-        public Model(CosmeticInfo cosmetic){
+        GeoModelAdditionCosmetic cosmetic;
+        public Model(GeoModelAdditionCosmetic cosmetic){
             this.cosmetic = cosmetic;
         }
 

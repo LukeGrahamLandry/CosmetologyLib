@@ -9,6 +9,8 @@ import net.minecraft.util.ResourceLocation;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static ca.lukegrahamlandry.cosmetology.util.EncodeUtil.GSON;
+
 public class DataStoreImpl implements DataStore {
     private final String id;
     protected Map<ResourceLocation, CosmeticInfo> cosmetics = new HashMap<>();
@@ -53,10 +55,10 @@ public class DataStoreImpl implements DataStore {
     @Override
     public void clearCosmetic(UUID playerID, ResourceLocation cosmeticKey) {
         List<ResourceLocation> slotsToClear = new ArrayList<>();
-        for (Map.Entry<String, ResourceLocation> data : getOrCreateData(playerID).equipped.entrySet()){
+        for (Map.Entry<ResourceLocation, ResourceLocation> data : getOrCreateData(playerID).equipped.entrySet()){
             System.out.println(data.getValue() + " " + cosmeticKey);
             if (data.getValue().equals(cosmeticKey)) {
-                slotsToClear.add(new ResourceLocation(data.getKey()));
+                slotsToClear.add(data.getKey());
             }
         }
 
@@ -129,17 +131,16 @@ public class DataStoreImpl implements DataStore {
         return this.playerCosmetics.get(playerID);
     }
 
-    private static Gson gson = new GsonBuilder().create();
     public String write(){
-        JsonObject data = gson.toJsonTree(this.playerCosmetics).getAsJsonObject();
+        JsonObject data = GSON.toJsonTree(this.playerCosmetics).getAsJsonObject();
         return data.toString();
     }
 
     public void read(String data){
-        JsonObject info = gson.fromJson(data, JsonObject.class);
+        JsonObject info = GSON.fromJson(data, JsonObject.class);
         this.playerCosmetics.clear();
         for (Map.Entry<String, JsonElement> entry : info.entrySet()){
-            this.playerCosmetics.put(UUID.fromString(entry.getKey()), gson.fromJson(entry.getValue().toString(), PlayerCosmeticsCollection.class));
+            this.playerCosmetics.put(UUID.fromString(entry.getKey()), GSON.fromJson(entry.getValue().toString(), PlayerCosmeticsCollection.class));
         }
     }
 }

@@ -1,16 +1,15 @@
 package ca.lukegrahamlandry.cosmetology.forge;
 
 import ca.lukegrahamlandry.cosmetology.data.packet.network.BaseMessage;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
+import static ca.lukegrahamlandry.cosmetology.util.EncodeUtil.GSON;
+
 public class PacketHolder<T extends BaseMessage> {
-    public static Gson gson = new GsonBuilder().create();
     private final Class<T> clazz;
 
     public PacketHolder(Class<T> clazz){
@@ -18,7 +17,7 @@ public class PacketHolder<T extends BaseMessage> {
     }
 
     public void encode(T message, PacketBuffer buffer){
-        JsonElement data = gson.toJsonTree(message);
+        JsonElement data = GSON.toJsonTree(message);
         System.out.println("encode " + data.toString());
         buffer.writeUtf(data.toString());
     }
@@ -26,7 +25,7 @@ public class PacketHolder<T extends BaseMessage> {
     public T decode(PacketBuffer buffer){
         String data = buffer.readUtf();
         System.out.println("decode " + data);
-        return gson.fromJson(data, this.clazz);
+        return GSON.fromJson(data, this.clazz);
     }
 
     public void handle(T message, Supplier<NetworkEvent.Context> context){
