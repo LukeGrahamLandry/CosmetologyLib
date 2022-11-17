@@ -161,6 +161,7 @@ public class CosmeticButton extends ImgButton {
         RenderSystem.popMatrix();
     }
 
+    // TODO: don't use forge call for easy multiloader port
     private static void tooltip(Button button, MatrixStack matrix, int xM, int yM) {
         ((CosmeticButton)button).tooltipAction.accept(() -> {
             net.minecraftforge.fml.client.gui.GuiUtils.drawHoveringText(

@@ -1,6 +1,8 @@
 # CosmetologyLib
 
-A library to help Minecraft mods add custom cosmetics.
+A library to help Minecraft mods add custom cosmetics. 
+A unified interface for equipping cosmetics supplied by a variety of rendering libraries. 
+Provides tools for managing which cosmetics each player has permission to equip. 
 
 ### Features
 
@@ -27,7 +29,6 @@ A library to help Minecraft mods add custom cosmetics.
 - geckolib animations as emotes
 - sounds synced with animations
 - replacing the player completely with different models
-  - builds directly on doing it for emotes
   - good for doing brain-dead "Minecraft But..." mods quickly
 - download resource packs from a url
   - load cosmetic definitions from json
@@ -44,17 +45,13 @@ A library to help Minecraft mods add custom cosmetics.
 - sql db DataStore
 - [tebex.io](https://github.com/tebexio/Tebex-Forge) DataStore
 - spigot plugin permissions DataSource
-- port to multi-loader & later MC versions (separate version common code as well, core code that doesn't reference minecraft classes)
+- port to multi-loader & later MC versions 
 - tutorial videos on making the models/animations and putting the in a resource pack in the right format
 - api improvements
-  - store equipped and unlocked in different places
-      - ie server tracking equipped and unlocked from one of the below, `new DataStore(EquippedInfoDataStore, UnlockedInfoDataStore)`
-      - start with just splitting DataSource into two interfaces
-  - split CosmeticInfo into types
-      - geo addition, geo model replace, vanilla, cpm, particle, emote, skin
-      - interface: boolean canGoInSlot(CosmeticSlot), allow incompatibility with other types
-      - tags for what can enable/disable
-  - .mod package so it doesn't need to be shadowed
+  - split DataStoreImpl into parts
+  - .mod package event listeners so it doesn't need to be shadowed
+  - automatically unequip and unfavourite when relocked
 - developer documentation
+- automatically release source jar artifacts so people can keep comments
 
 PRs for these or anything else you think would be cool are always welcome!

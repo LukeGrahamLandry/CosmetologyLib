@@ -6,6 +6,9 @@ import net.minecraft.client.gui.screen.inventory.InventoryScreen;
 import net.minecraft.client.gui.widget.Widget;
 import net.minecraft.util.text.StringTextComponent;
 
+/**
+ * Renders the player, with all currently equipped cosmetics, in a GUI.
+ */
 public class PlayerCosmeticsPreviewWidget extends Widget {
     private final Drawable background;
 

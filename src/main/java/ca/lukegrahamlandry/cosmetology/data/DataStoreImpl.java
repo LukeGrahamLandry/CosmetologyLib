@@ -11,6 +11,12 @@ import java.util.stream.Collectors;
 
 import static ca.lukegrahamlandry.cosmetology.util.EncodeUtil.GSON;
 
+/**
+ * An example implementation of a DataStore.
+ * Tracks a group of cosmetics and maps each player to a PlayerCosmeticsCollection to store their individual settings.
+ * Provides read/write methods to serialize the player information as json.
+ * The available group of cosmetics are not serialized and must be registered again whenever the game restarts.
+ */
 public class DataStoreImpl implements DataStore {
     private final String id;
     protected Map<ResourceLocation, CosmeticInfo> cosmetics = new HashMap<>();
@@ -33,7 +39,7 @@ public class DataStoreImpl implements DataStore {
 
     @Override
     public void register(CosmeticInfo cosmetic) {
-        this.cosmetics.put(cosmetic.id, cosmetic);
+        if (cosmetic.isRegisterAllowed()) this.cosmetics.put(cosmetic.id, cosmetic);
     }
 
     @Override

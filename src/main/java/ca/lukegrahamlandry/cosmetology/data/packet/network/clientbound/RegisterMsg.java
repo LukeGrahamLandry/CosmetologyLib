@@ -7,6 +7,10 @@ import ca.lukegrahamlandry.cosmetology.data.packet.network.BaseMessage;
 
 import java.util.Collection;
 
+/**
+ * A client-bound packet that registers a group of cosmetics to a specified DataStore.
+ * This allows the server to decide which cosmetics should exist and keep the clients in sync.
+ */
 public class RegisterMsg extends BaseMessage {
     private String sourceID;
     private Collection<CosmeticInfo> cosmetics;

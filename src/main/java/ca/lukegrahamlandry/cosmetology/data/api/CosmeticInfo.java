@@ -1,14 +1,16 @@
 package ca.lukegrahamlandry.cosmetology.data.api;
 
 import com.google.gson.*;
-import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 
 import java.lang.reflect.Type;
-import java.util.List;
 
 import static ca.lukegrahamlandry.cosmetology.util.EncodeUtil.GSON;
 
+/**
+ * A single cosmetic.
+ * Subclasses will define how it will be rendered in game.
+ */
 public abstract class CosmeticInfo {
     public final ResourceLocation id;
     public final ResourceLocation slot;
@@ -18,6 +20,13 @@ public abstract class CosmeticInfo {
         this.id = id;
         this.slot = slot;
         this.clazz = this.getClass().getName();
+    }
+
+    /**
+     * Cosmetics may refuse to be registered if a mod required for their rendering is not present.
+     */
+    public boolean isRegisterAllowed(){
+        return true;
     }
 
     public static class Serializer implements JsonDeserializer<CosmeticInfo>, JsonSerializer<CosmeticInfo> {

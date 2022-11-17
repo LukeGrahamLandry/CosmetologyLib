@@ -5,6 +5,11 @@ import net.minecraft.util.ResourceLocation;
 import java.util.*;
 import java.util.stream.Stream;
 
+/**
+ * A very simple data structure for storing a single player's cosmetic information.
+ * Stores which cosmetics are equipped in each slot, which they have permission to use and which are marked as favourites.
+ * A DataStore implementation is responsible for storing these somewhere and mapping them to players.
+ */
 public class PlayerCosmeticsCollection {
     public Map<ResourceLocation, ResourceLocation> equipped = new HashMap<>();
     public List<ResourceLocation> unlocked = new ArrayList<>();

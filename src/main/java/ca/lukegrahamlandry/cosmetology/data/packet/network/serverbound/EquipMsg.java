@@ -9,8 +9,14 @@ import net.minecraft.util.ResourceLocation;
 
 import java.util.UUID;
 
+/**
+ * A server-bound packet that notifies that a client would like to equip a specified cosmetic.
+ * Causes the server to update its model and re-sync the player to all clients.
+ * TODO: remove UUID field since packet system was updated to supply actual sender
+ */
 public class EquipMsg extends BaseMessage {
     private String sourceID;
+    @Deprecated
     private UUID player;
     private final ResourceLocation slot;
     private ResourceLocation cosmetic;

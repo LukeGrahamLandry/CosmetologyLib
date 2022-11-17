@@ -5,11 +5,9 @@ import net.minecraft.util.ResourceLocation;
 
 import java.util.UUID;
 
-
-// Available - what cosmetics exist
-// Unlocked - what cosmetics am i allowed to use
-// Equipped - what cosmetics am i wearing
-
+/**
+ * A combination of all interfaces required for a cosmetics management implementation.
+ */
 public interface DataStore extends DataStoreEquipped, DataStoreUnlocked, DataStoreAvailable, DataStoreFavourites {
     String getStoreID();
 

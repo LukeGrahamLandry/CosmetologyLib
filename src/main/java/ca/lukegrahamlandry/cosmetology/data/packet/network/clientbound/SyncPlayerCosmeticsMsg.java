@@ -9,6 +9,10 @@ import net.minecraft.util.ResourceLocation;
 import java.util.Map;
 import java.util.UUID;
 
+/**
+ * A client-bound packet that updates the cosmetics settings of a group of players.
+ * Sent when someone logs in or updates their settings (equipping a new hat for example).
+ */
 public class SyncPlayerCosmeticsMsg extends BaseMessage {
     private String sourceID;
     private Map<UUID, PlayerCosmeticsCollection> cosmetics;

@@ -8,6 +8,12 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Each slot represents a different type of cosmetic.
+ * Each player may only have one cosmetic equipped in a slot at a time.
+ * Generally all entries of a given slot will render in the same way
+ * and thus use the same subclass of CosmeticInfo but this is not required.
+ */
 public class CosmeticSlots {
     public static ResourceLocation HEAD = new ResourceLocation(CosmetologyApi.MOD_ID, "head");
     public static ResourceLocation CHEST = new ResourceLocation(CosmetologyApi.MOD_ID, "chest");
@@ -20,7 +26,10 @@ public class CosmeticSlots {
         return ALL;
     }
 
-    public static boolean add(ResourceLocation slotId, ResourceLocation renderType){
+    /**
+     * Register a custom slot to be included in the CosmeticSlotArgumentType options
+     */
+    public static boolean add(ResourceLocation slotId){
         return ALL.add(slotId);
     }
 }

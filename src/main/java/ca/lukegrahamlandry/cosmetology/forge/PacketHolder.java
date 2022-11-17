@@ -9,6 +9,12 @@ import java.util.function.Supplier;
 
 import static ca.lukegrahamlandry.cosmetology.util.EncodeUtil.GSON;
 
+/**
+ * A generic packet message.
+ * Initialized with a data class, instances of which will automatically be json encoded to be sent over the network.
+ * - The data class must implement BaseMessage#handle to react when the packet is received
+ * - EncodeUtil#GSON must have all necessary type adapters to encode all fields of the data class
+ */
 public class PacketHolder<T extends BaseMessage> {
     private final Class<T> clazz;
 

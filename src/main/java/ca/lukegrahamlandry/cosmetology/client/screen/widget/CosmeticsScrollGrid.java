@@ -9,8 +9,6 @@ import net.minecraft.client.gui.widget.Widget;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.gui.widget.list.ExtendedList;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -129,7 +127,6 @@ public class CosmeticsScrollGrid extends ExtendedList<CosmeticsScrollGrid.Entry>
         this.btns.get(info.id).buttonStateFavourite = this.backingDataStore.isFavourite(player, info.id);
     }
 
-    @OnlyIn(Dist.CLIENT)
     public class Entry extends ExtendedList.AbstractListEntry<CosmeticsScrollGrid.Entry> {
         List<Widget> buttons;
         public Entry(List<Widget> buttons){
