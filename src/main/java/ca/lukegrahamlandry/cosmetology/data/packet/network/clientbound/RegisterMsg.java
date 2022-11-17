@@ -22,7 +22,6 @@ public class RegisterMsg extends BaseMessage {
 
     @Override
     public void handle() {
-        CosmetologyApi.LOGGER.debug("PACKETMSG register");
         DataStore store = CosmetologyApi.getSource(this.sourceID);
         this.cosmetics.forEach(store::register);
     }
