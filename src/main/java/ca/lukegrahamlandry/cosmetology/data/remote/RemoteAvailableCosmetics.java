@@ -1,5 +1,6 @@
 package ca.lukegrahamlandry.cosmetology.data.remote;
 
+import ca.lukegrahamlandry.cosmetology.CosmetologyApi;
 import ca.lukegrahamlandry.cosmetology.data.impl.AvailableCosmeticsImpl;
 import ca.lukegrahamlandry.cosmetology.util.UrlFetchUtil;
 import com.google.gson.JsonElement;
@@ -29,7 +30,7 @@ public class RemoteAvailableCosmetics extends AvailableCosmeticsImpl {
             if (!self.url.equals(url)) self.update();
             return self;
         } catch (JsonSyntaxException e){
-            System.out.println("Failed to parse RemoteAvailableCosmetics from " + url);
+            CosmetologyApi.errorLog("Failed to parse RemoteAvailableCosmetics from " + url);
             e.printStackTrace();
             return null;
         }

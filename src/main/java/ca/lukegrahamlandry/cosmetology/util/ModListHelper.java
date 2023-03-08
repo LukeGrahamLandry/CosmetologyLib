@@ -1,5 +1,7 @@
 package ca.lukegrahamlandry.cosmetology.util;
 
+import ca.lukegrahamlandry.cosmetology.CosmetologyApi;
+
 /**
  * Helper methods for detecting if certain mods are available to render cosmetics.
  * I can't just ask Forge since their code may be shadowed without loading them as a mod.
@@ -16,7 +18,7 @@ public class ModListHelper {
     }
 
     public static void printMissingMods(){
-        if (!isGeckolibAvailable()) System.out.println("Mod 'geckolib3' is unavailable. GeoModelAdditionCosmetic is disabled.");
+        if (!isGeckolibAvailable()) CosmetologyApi.errorLog("Mod 'geckolib3' is unavailable. GeoModelAdditionCosmetic is disabled.");
     }
 
     private static boolean canFindClass(String className){

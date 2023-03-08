@@ -50,6 +50,7 @@ public class PlayerCosmeticsCollection {
 
     public void lockAll() {
         unlocked.clear();
+        equipped.clear();
     }
 
     public void unfavouriteAll() {

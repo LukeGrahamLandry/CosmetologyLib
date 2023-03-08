@@ -127,7 +127,7 @@ public class CosmeticsScrollGrid extends ExtendedList<CosmeticsScrollGrid.Entry>
         this.btns.get(info.id).buttonStateFavourite = this.backingDataStore.isFavourite(player, info.id);
     }
 
-    public class Entry extends ExtendedList.AbstractListEntry<CosmeticsScrollGrid.Entry> {
+    public static class Entry extends ExtendedList.AbstractListEntry<CosmeticsScrollGrid.Entry> {
         List<Widget> buttons;
         public Entry(List<Widget> buttons){
             this.buttons = buttons;

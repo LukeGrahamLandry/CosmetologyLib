@@ -1,9 +1,11 @@
 package ca.lukegrahamlandry.cosmetology.data.packet.network.clientbound;
 
 import ca.lukegrahamlandry.cosmetology.CosmetologyApi;
+import ca.lukegrahamlandry.cosmetology.data.DataStoreImpl;
 import ca.lukegrahamlandry.cosmetology.data.api.DataStore;
 import ca.lukegrahamlandry.cosmetology.data.PlayerCosmeticsCollection;
 import ca.lukegrahamlandry.cosmetology.data.packet.network.BaseMessage;
+import ca.lukegrahamlandry.cosmetology.util.EncodeUtil;
 import net.minecraft.util.ResourceLocation;
 
 import java.util.Map;
@@ -28,10 +30,6 @@ public class SyncPlayerCosmeticsMsg extends BaseMessage {
         for (UUID player : this.cosmetics.keySet()){
             PlayerCosmeticsCollection data = this.cosmetics.get(player);
 
-            for (Map.Entry<ResourceLocation , ResourceLocation> slotData : data.equipped.entrySet()){
-                store.set(player, slotData.getKey(), slotData.getValue());
-            }
-
             store.lockAll(player);
             for (ResourceLocation cosmeticKey : data.unlocked){
                 store.unlock(player, cosmeticKey);
@@ -40,6 +38,11 @@ public class SyncPlayerCosmeticsMsg extends BaseMessage {
             store.unfavouriteAll(player);
             for (ResourceLocation cosmeticKey : data.favourites){
                 store.favourite(player, cosmeticKey);
+            }
+
+            store.unequipAll(player);
+            for (Map.Entry<ResourceLocation , ResourceLocation> slotData : data.equipped.entrySet()){
+                store.set(player, slotData.getKey(), slotData.getValue());
             }
         }
     }

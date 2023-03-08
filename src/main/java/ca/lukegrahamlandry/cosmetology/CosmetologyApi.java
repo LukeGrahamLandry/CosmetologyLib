@@ -10,8 +10,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class CosmetologyApi {
-    public static final Logger LOGGER = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     public static final String MOD_ID = "cosmetology";
+    public static boolean debugMode = false;
 
     static Map<String, DataStore> clientDataSources = new HashMap<>();
     public static Map<String, ServerPacketDataStore> serverPacketDataSources = new HashMap<>();
@@ -27,5 +28,13 @@ public class CosmetologyApi {
 
     public static DataStore getSource(String sourceID) {
         return clientDataSources.get(sourceID);
+    }
+
+    public static void debugLog(String msg) {
+        if (debugMode) LOGGER.debug(msg);
+    }
+
+    public static void errorLog(String msg) {
+        LOGGER.error(msg);
     }
 }

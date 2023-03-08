@@ -1,9 +1,11 @@
 package ca.lukegrahamlandry.cosmetology.data.type;
 
+import ca.lukegrahamlandry.cosmetology.client.screen.widget.btn.CosmeticButton;
 import ca.lukegrahamlandry.cosmetology.data.api.CosmeticInfo;
 import ca.lukegrahamlandry.cosmetology.util.ModListHelper;
 import net.minecraft.util.ResourceLocation;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -44,6 +46,16 @@ public class GeoModelAdditionCosmetic extends CosmeticInfo {
         return animation;
     }
 
+    @Override
+    public String toString() {
+        return "GeoModelAdditionCosmetic[" +
+                "texture=" + texture +
+                ", model=" + model +
+                ", animation=" + animation +
+                ", bones=" + (bones == null ? "ALL" : Arrays.deepToString(bones.toArray())) +
+                ']';
+    }
+
     /**
      * If Geckolib is not installed we will be unable to render.
      * Instead of crashing when someone equips it, return false here and gracefully handle not classloading any geckolib classes.
@@ -51,5 +63,10 @@ public class GeoModelAdditionCosmetic extends CosmeticInfo {
     @Override
     public boolean isRegisterAllowed() {
         return ModListHelper.isGeckolibAvailable() && super.isRegisterAllowed();
+    }
+
+    @Override
+    public void guiButtonRender(int centerX, int centerY, int width, int height, boolean glint, boolean selected) {
+        CosmeticButton.renderGeoModelCosmetic(this, centerX, centerY, width, height, glint, selected);
     }
 }

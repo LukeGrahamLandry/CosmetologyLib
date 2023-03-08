@@ -1,7 +1,11 @@
 package ca.lukegrahamlandry.cosmetology.data.api;
 
+import ca.lukegrahamlandry.cosmetology.CosmetologyApi;
+import ca.lukegrahamlandry.cosmetology.util.EncodeUtil;
 import com.google.gson.*;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 
 import java.lang.reflect.Type;
 import java.util.HashMap;
@@ -31,6 +35,18 @@ public abstract class CosmeticInfo {
         return true;
     }
 
+    public void guiButtonRender(int centerX, int centerY, int width, int height, boolean glint, boolean selected) {
+        CosmetologyApi.errorLog("Cannot render cosmetic button for: " + this);
+    }
+
+    public TextComponent getDisplayTitle() {
+        return new TranslationTextComponent("cosmetic." + this.id.getNamespace() + "." + this.id.getPath());
+    }
+
+    public TextComponent getDisplayDescription() {
+        return new TranslationTextComponent("cosmetic." + this.id.getNamespace() + "." + this.id.getPath() + ".desc");
+    }
+
     /**
      * Saves type information when encoding as json so when we decode a CosmeticInfo we get the correct subclass.
      */
@@ -52,7 +68,7 @@ public abstract class CosmeticInfo {
                 if (LEGACY_FIXERS.containsKey(className)){
                     clazz = LEGACY_FIXERS.get(className);
                 } else {
-                    System.out.println("Cannot deserialize CosmeticInfo json: " + input);
+                    CosmetologyApi.errorLog("Cannot deserialize CosmeticInfo json: " + input);
                     e.printStackTrace();
                     return null;
                 }

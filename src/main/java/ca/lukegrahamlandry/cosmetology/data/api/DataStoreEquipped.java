@@ -14,4 +14,6 @@ public interface DataStoreEquipped {
     void clearSlot(UUID playerID, ResourceLocation slotKey);
     List<CosmeticInfo> getActive(UUID playerID);
     CosmeticInfo getInSlot(UUID playerID, ResourceLocation slotID);
+
+    void unequipAll(UUID player);
 }

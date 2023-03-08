@@ -12,12 +12,13 @@ buildscript {
 plugins {
     id "net.minecraftforge.gradle" version "5.1.+"
     id 'org.parchmentmc.librarian.forgegradle' version '1.+'
+    id "maven-publish"
 }
 
 apply plugin: 'org.spongepowered.mixin'
 
-group = 'ca.lukegrahamlandry'
-version = '1.0.10'
+group = 'ca.lukegrahamlandry.cosmetology'
+version = mod_version
 
 java {
     archivesBaseName = 'cosmetology'
@@ -174,3 +175,19 @@ jar {
 jar.finalizedBy('reobfJar')
 
 apply from: "https://moddingtutorials.org/applesilicon.gradle"
+apply from: "../mc-utils/publish.gradle"
+
+publishing {
+    publications {
+        mavenForge(MavenPublication) {
+            artifactId = rootProject.archives_base_name + "-Forge"
+            from components.java
+            version "${rootProject.mod_version}"
+        }
+    }
+    repositories {
+        maven {
+            url "file://" + rootProject.my_maven_location
+        }
+    }
+}

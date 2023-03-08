@@ -65,8 +65,7 @@ public class CosmeticButton extends ImgButton {
     }
 
     public void renderCosmetic(){
-        if (this.cosmetic instanceof GeoModelAdditionCosmetic) renderGeoModelCosmetic((GeoModelAdditionCosmetic) this.cosmetic, this.x + (this.width / 2), this.y + (this.height / 2), this.width, this.height, this.hasGlint(), false);
-        else System.out.println("Cannot render cosmetic button for: " + this.cosmetic.toString());
+        this.cosmetic.guiButtonRender(this.x + (this.width / 2), this.y + (this.height / 2), this.width, this.height, this.hasGlint(), false);
     }
 
     private static ItemStack AN_ITEM_STACK = new ItemStack(new NullItem(ArmorMaterial.CHAIN, EquipmentSlotType.CHEST, new Item.Properties()));
@@ -94,7 +93,7 @@ public class CosmeticButton extends ImgButton {
         stack.scale(scale, scale, 1);
     }
     public static void renderGeoModelCosmetic(GeoModelAdditionCosmetic cosmetic, int centerX, int centerY, int width, int height, boolean glint, boolean selected){
-        // System.out.println("try render "  + cosmetic.id + " model-" + cosmetic.getModel() + " texture-" + cosmetic.getTexture());
+        // CosmetologyApi.debugLog("try render "  + cosmetic.id + " model-" + cosmetic.getModel() + " texture-" + cosmetic.getTexture());
         int scale = 30;
         float lookAtX = 0;
         float lookAtY = 0;
@@ -175,10 +174,10 @@ public class CosmeticButton extends ImgButton {
     }
 
     public TextComponent getTitle(){
-        return new TranslationTextComponent("cosmetic." + this.cosmetic.id.getNamespace() + "." + this.cosmetic.id.getPath());
+        return this.cosmetic.getDisplayTitle();
     }
 
     public TextComponent getDescription(){
-        return new TranslationTextComponent("cosmetic." + this.cosmetic.id.getNamespace() + "." + this.cosmetic.id.getPath() + ".desc");
+        return this.cosmetic.getDisplayDescription();
     }
 }

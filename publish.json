@@ -1,0 +1,16 @@
+{
+  "loader": "forge",
+  "mc_versions": ["1.16.5"],
+  "releaseType": "release",
+  "curseforge": {
+    "id": "705314"
+  },
+  "modrinth": {
+    "id": "CYDnvmqw"
+  },
+  "github": {
+    "owner": "LukeGrahamLandry",
+    "repo": "CosmetologyLib",
+    "branch": "1.16"
+  }
+}

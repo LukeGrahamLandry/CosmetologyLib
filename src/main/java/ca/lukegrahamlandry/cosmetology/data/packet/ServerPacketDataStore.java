@@ -1,13 +1,11 @@
 package ca.lukegrahamlandry.cosmetology.data.packet;
 
+import ca.lukegrahamlandry.cosmetology.CosmetologyApi;
 import ca.lukegrahamlandry.cosmetology.data.DataStoreImpl;
 import ca.lukegrahamlandry.cosmetology.data.PlayerCosmeticsCollection;
 import ca.lukegrahamlandry.cosmetology.data.packet.network.BaseMessage;
 import ca.lukegrahamlandry.cosmetology.data.packet.network.clientbound.RegisterMsg;
 import ca.lukegrahamlandry.cosmetology.data.packet.network.clientbound.SyncPlayerCosmeticsMsg;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
@@ -100,13 +98,13 @@ public class ServerPacketDataStore {
         @Override
         public void load(CompoundNBT tag) {
             ServerPacketDataStore.this.model.read(tag.getString("data"));
-            System.out.println("load " + tag.getString("data"));
+            CosmetologyApi.debugLog("load " + tag.getString("data"));
         }
 
         @Override
         public CompoundNBT save(CompoundNBT tag) {
             tag.putString("data", ServerPacketDataStore.this.model.write());
-            System.out.println("save " + tag.getString("data"));
+            CosmetologyApi.debugLog("save " + tag.getString("data"));
             return tag;
         }
     }

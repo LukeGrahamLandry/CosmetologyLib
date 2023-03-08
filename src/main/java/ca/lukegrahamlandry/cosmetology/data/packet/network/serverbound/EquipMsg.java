@@ -6,6 +6,7 @@ import ca.lukegrahamlandry.cosmetology.data.packet.ServerPacketDataStore;
 import ca.lukegrahamlandry.cosmetology.data.packet.network.BaseMessage;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.ResourceLocation;
+import software.bernie.shadowed.eliotlash.mclib.math.functions.classic.Cos;
 
 import java.util.UUID;
 
@@ -31,9 +32,10 @@ public class EquipMsg extends BaseMessage {
     @Override
     public void handle(ServerPlayerEntity sender) {
         if (!sender.getUUID().equals(this.player)){
-            System.out.println(sender.getName() + "" + sender.getUUID() + " is trying to set cosmetics for " + this.player);
+            CosmetologyApi.errorLog(sender.getName() + "" + sender.getUUID() + " is trying to set cosmetics for " + this.player);
             return;
         }
+
         if (CosmetologyApi.serverPacketDataSources.containsKey(this.sourceID)){
             ServerPacketDataStore store = CosmetologyApi.serverPacketDataSources.get(this.sourceID);
             store.model.set(this.player, this.slot, this.cosmetic);

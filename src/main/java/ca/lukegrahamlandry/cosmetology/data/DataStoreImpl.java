@@ -52,7 +52,6 @@ public class DataStoreImpl implements DataStore {
         return CosmeticSlots.getAll();
     }
 
-    // TODO: impl must check that cosmetic is unlocked
     @Override
     public void set(UUID playerID, ResourceLocation slotKey, ResourceLocation cosmeticKey) {
         if (getOrCreateData(playerID).hasUnlocked(cosmeticKey) || cosmeticKey == null) getOrCreateData(playerID).equip(slotKey, cosmeticKey);
@@ -62,7 +61,6 @@ public class DataStoreImpl implements DataStore {
     public void clearCosmetic(UUID playerID, ResourceLocation cosmeticKey) {
         List<ResourceLocation> slotsToClear = new ArrayList<>();
         for (Map.Entry<ResourceLocation, ResourceLocation> data : getOrCreateData(playerID).equipped.entrySet()){
-            System.out.println(data.getValue() + " " + cosmeticKey);
             if (data.getValue().equals(cosmeticKey)) {
                 slotsToClear.add(data.getKey());
             }
@@ -86,6 +84,13 @@ public class DataStoreImpl implements DataStore {
     @Override
     public CosmeticInfo getInSlot(UUID playerID, ResourceLocation slotID) {
         return getInfo(getOrCreateData(playerID).getFromSlot(slotID));
+    }
+
+    @Override
+    public void unequipAll(UUID player) {
+        for (ResourceLocation slot : CosmeticSlots.getAll()){
+            clearSlot(player, slot);
+        }
     }
 
     @Override

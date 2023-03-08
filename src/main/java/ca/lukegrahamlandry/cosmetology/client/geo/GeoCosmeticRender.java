@@ -1,6 +1,5 @@
 package ca.lukegrahamlandry.cosmetology.client.geo;
 
-import ca.lukegrahamlandry.cosmetology.data.api.CosmeticInfo;
 import ca.lukegrahamlandry.cosmetology.data.type.GeoModelAdditionCosmetic;
 import net.minecraft.util.ResourceLocation;
 import software.bernie.geckolib3.core.processor.IBone;
@@ -13,14 +12,6 @@ public class GeoCosmeticRender extends GeoArmorRenderer<NullItem> {
     public GeoCosmeticRender(GeoModelAdditionCosmetic cosmetic) {
         super(new Model(cosmetic));
         this.cosmetic = cosmetic;
-        this.headBone = "helmet";
-        this.bodyBone = "chestplate";
-        this.rightArmBone = "rightArm";
-        this.leftArmBone = "leftArm";
-        this.rightLegBone = "rightLeg";
-        this.leftLegBone = "leftLeg";
-        this.rightBootBone = "rightBoot";
-        this.leftBootBone = "leftBoot";
     }
 
     public void filterBones(){
