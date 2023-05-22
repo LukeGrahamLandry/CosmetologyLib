@@ -1,5 +1,6 @@
 package ca.lukegrahamlandry.cosmetology.util;
 
+import ca.lukegrahamlandry.cosmetology.CosmetologyApi;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 
@@ -15,7 +16,10 @@ import java.util.stream.Collectors;
 public class UrlFetchUtil {
     public static JsonElement getUrlJson(String url){
         String response = getUrlText(url);
-        if (response == null) return null;
+        if (response == null) {
+            CosmetologyApi.errorLog("Failed to fetch url: " + url);
+            return null;
+        }
         return new JsonParser().parse(response);
     }
 

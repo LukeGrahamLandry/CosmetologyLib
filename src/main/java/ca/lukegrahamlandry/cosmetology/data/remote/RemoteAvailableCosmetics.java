@@ -19,6 +19,7 @@ public class RemoteAvailableCosmetics extends AvailableCosmeticsImpl {
      * Loads a AvailableCosmeticsImpl from a url.
      * The url must lead to a plaintext json object with the 'id' and 'cosmetics' fields.
      * If the remote object defines the `url` key, its data will be replaced by the data fetched from the new url.
+     * Returns null if the data couldn't be loaded. 
      */
     public static RemoteAvailableCosmetics get(String url){
         JsonElement data = UrlFetchUtil.getUrlJson(url);
