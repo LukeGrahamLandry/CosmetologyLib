@@ -40,9 +40,13 @@ public class ServerPacketDataStoreWeb extends ServerPacketDataStore {
     public void onPlayerLogin(PlayerEntity player) {
         // Retrieve latest unlocks and apply this player's new available cosmetics list.
         UnlockedCosmetics data = UnlockedCosmetics.get(this.unlockedUrl);
-        if (data != null && data.unlocked.containsKey(player.getUUID())){
+        if (data != null){
             PlayerCosmeticsCollection cosmetics = this.model.getOrCreateData(player.getUUID());
-            cosmetics.unlocked = data.unlocked.get(player.getUUID());
+            if (data.unlocked.containsKey(player.getUUID())) {
+                cosmetics.unlocked = data.unlocked.get(player.getUUID());
+            } else {
+                cosmetics.unlocked.clear();
+            }
         }
         // Then sync everything as usual.
         // The packet handlers deal with removing any equipped cosmetics that are no longer unlocked.
